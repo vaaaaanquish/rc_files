@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<folders>
+	<folder>
+		<title>python</title>
+		<snippets>
+			<snippet>
+				<title>jup_pd_printformat</title>
+				<content>pd.options.display.max_columns = None 
+pd.options.display.max_rows = 100
+pd.options.display.precision = 2 # 有効桁</content>
+			</snippet>
+			<snippet>
+				<title>jup_mat</title>
+				<content>%matplotlib inline
+import matplotlib.pyplot as plt
+from IPython.display import HTML
+import japanize_matplotlib</content>
+			</snippet>
+			<snippet>
+				<title>untitled snippet</title>
+				<content>size = 400
+row =5
+col = 5
+
+fig, ax = plt.subplots(row, col, sharex=&apos;col&apos;, sharey=&apos;row&apos;)
+fig.set_size_inches(s*col//100, s*row//100)
+data = data[:row*col]    # sampling image
+for i,x in enumerate(data):
+    img = cv2.imread(x)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = cv2.resize(img, (size,size))
+    ax[i%col, i//col].imshow(img)
+    ax[i%col, i//col].set_title(x)
+</content>
+			</snippet>
+		</snippets>
+	</folder>
+</folders>

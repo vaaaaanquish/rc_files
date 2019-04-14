@@ -147,6 +147,7 @@ jupyter labextension install @jupyterlab/plotly-extension
 jupyter labextension install jupyterlab_bokeh
 jupyter labextension install ipyvolume
 jupyter labextension install @jupyter-widgets/jupyterlab-manager
+jupyter labextension install jupyterlab-drawio
 ```
 
 ## check PATH
