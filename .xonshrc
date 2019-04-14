@@ -1,0 +1,255 @@
+from prompt_toolkit.filters import (Condition, IsMultiline, HasSelection, ViInsertMode)
+import re
+import sys
+import os
+import platform
+import json
+from collections import OrderedDict
+from operator import itemgetter
+import time
+import builtins
+from pip._internal import main as _main
+import importlib
+import xonsh.xontribs
+from xonsh.xontribs import xontrib_context, update_context
+from prompt_toolkit.formatted_text import FormattedText
+from prompt_toolkit.keys import Keys
+from xonsh.lazyasd import lazyobject
+from collections import Counter
+
+
+$SHELL='/bin/zsh'
+$EDITOR = 'nvim'
+$VISUAL = 'nvim'
+$VI_MODE = False
+$COMPLETIONS_CONFIRM = True
+$IGNOREEOF = True
+$INDENT = "    "
+$CASE_SENSITIVE_COMPLETIONS = False
+$HISTCONTROL = "ignoredups"
+$XONSH_AUTOPAIR = False
+$AUTO_CD = True
+$XONSH_SHOW_TRACEBACK = True
+$SUPPRESS_BRANCH_TIMEOUT_MESSAGE = True
+$UPDATE_COMPLETIONS_ON_KEYPRESS = True
+def get_git_user():
+    return '{INTENSE_GREEN}' + $(git config user.name).strip() + ':{curr_branch}{WHITE} ( {YELLOW}"{cwd}" {WHITE}) {INTENSE_RED}$ '
+$PROMPT = get_git_user
+$LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30"
+$XONSH_HISTORY_SIZE = (3000, 'commands')
+XONSH_HISTORY_MATCH_ANYWHERE = True
+$PTK_STYLE_OVERRIDES={
+ "completion-menu": "bg:ansiblack ansiwhite",
+ "completion-menu.completion": "bg:ansiblack",
+ "completion-menu.completion.current": "bg:ansiwhite ansiblack",
+ "scrollbar.background": "bg:ansibrightblack",
+ "scrollbar.arrow": "bg:ansiblack ansiwhite bold" ,
+ "scrollbar.button": "bg:ansiblack",
+ "auto-suggestion": "ansibrightblack",
+ "aborting": "ansibrightblack",
+ }
+
+
+if platform.system() == 'Darwin':
+    aliases["ls"] = "ls -hG"
+    aliases["lc"] = "colorls --sf"
+    aliases["lt"] = "colorls --tree"
+    aliases["l"] = "colorls -ltr --sf"
+    aliases["la"] = "colorls -la"
+    aliases["ll"] = "colorls -l"
+    aliases["lx"] = "colorls -x"
+    aliases["lf"] = "colorls -f"
+    aliases["ld"] = "colorls -d"
+else:
+    aliases['ls'] = "ls --color=auto"
+    aliases["l"] = "ls -lh"
+    aliases["la"] = "ls -lha"
+    aliases["ll"] = "ls -lh"
+    aliases["sc"] = "screen"
+    aliases['free'] = "free -h"
+    aliases['f'] = 'free -h'
+    aliases['wf'] = 'watch free -h'
+aliases['ee'] = "exit"
+aliases["ju"] = "jupyter lab"
+aliases["gb"] = "git branch"
+aliases["gco"] = "git checkout"
+aliases["gc"] = "git commit -m"
+aliases["gd"] = "git diff"
+aliases["ga"] = "git add"
+aliases["gl"] = "git log"
+aliases['gpush'] = "git push"
+aliases['gpull'] = 'git pull'
+aliases["vz"] = "nvim ~/.zshrc"
+aliases["vx"] = "nvim ~/.xonshrc"
+aliases["vv"] = "nvim ~/.config/nvim"
+aliases["vs"] = "nvim ~/.ssh/config"
+aliases["v"] = "nvim"
+aliases["vi"] = "nvim"
+aliases["vim"] = "nvim"
+
+
+# xontrib
+xontrib load z
+xontrib load readable-traceback
+$READABLE_TRACE_STRIP_PATH_ENV=True
+$READABLE_TRACE_REVERSE=True
+xontrib load coreutils
+
+# file save dir
+$DIR_HIST_PATH = "/Users/vanquish/.dirhist"
+@events.on_chdir
+def add_to_file(olddir, newdir, **kw):
+    with open($DIR_HIST_PATH[0], 'a') as dh:
+        print(newdir, file=dh)
+
+# z
+def z():
+    lines = open($DIR_HIST_PATH[0]).read().rstrip("\n").split("\n")
+    return("\n".join([p for p, c in Counter(lines).most_common()]))
+
+@events.on_ptk_create
+def custom_keybindings(bindings, **kw):
+
+    @bindings.add('c-v')
+    def edit_in_editor(event):
+        event.current_buffer.tempfile_suffix = '.xsh'
+        event.current_buffer.open_in_editor(event.cli)
+
+    @bindings.add('c-r')
+    def select_history(event):
+        sess_history = $(history).split('\n')
+        hist = _get_history(sess_history)
+        selected = $(echo @(hist) | peco)
+        event.current_buffer.insert_text(selected.strip())
+
+    @bindings.add('c-s')
+    def select_ssh(event):
+        hosts = _get_host(True)
+        selected = $(echo @(hosts) | peco)
+        if selected:
+            event.current_buffer.insert_text('ssh ' + selected.strip().split(', ')[0])
+
+    @bindings.add('c-f')
+    def select_file(event):
+        r = lambda x: './'+x if os.path.isdir(x) else x
+        files = '\n'.join([r(x.split(' ')[-1]) for x in $(ls -l).split('\n')])
+        selected = $(echo @(files) | peco)
+        event.current_buffer.insert_text(selected.strip())
+
+    @bindings.add('c-d')
+    def _z(event):
+        selected = $(echo @(z()) | peco)
+        cd_cmd = "cd " + selected.strip()
+        event.current_buffer.insert_text(cd_cmd)
+
+    @bindings.add('c-t')
+    def _engs(event):
+        event.current_buffer.insert_text('t """')
+        t=$(pbpaste)
+        event.current_buffer.insert_text(t)
+        event.current_buffer.insert_text('"""')
+
+
+from prompt_toolkit import print_formatted_text
+from prompt_toolkit.styles import Style
+inquirer_style = Style.from_dict({
+    'qa': '#5F819D',
+    'qu': '#FF9D00',
+    'dp': '#000'
+})
+def _get_host(color=False):
+    all_text = ''
+    text = ''
+    for x in $(cat ~/.ssh/config).split('\n'):
+        if 'LocalForward' in x:
+            text += ', ' + x.strip().split(' ')[1]
+        if 'HostName' in x:
+            text += ', ' + x.strip().split(' ')[1]
+        elif 'Host ' in x:
+            if text!='':
+                all_text += text + '\n'
+            text = x.split(' ')[1]
+    all_text += text + '\n'
+    if not color:
+        all_d = []
+        for x in all_text.split('\n'):
+            for i,y in enumerate(x.split(', ')):
+                if i==0:
+                    all_d.append(('class:qu', y))
+                if i==1:
+                    all_d.append(('', ', '))
+                    all_d.append(('class:qa', y))
+                    if len(x.split(', '))==2:
+                        all_d.append(('','\n'))
+                if i==2:
+                    all_d.append(('', ', '))
+                    all_d.append(('class:qp', y))
+                    all_d.append(('','\n'))
+        print_formatted_text(FormattedText(all_d),
+                style=inquirer_style)
+        return
+    return all_text
+aliases['host']=_get_host
+
+
+def _get_history(session_history=None, return_list=False):
+    hist_dir = __xonsh__.env['XONSH_DATA_DIR']
+    files = [ os.path.join(hist_dir,f) for f in os.listdir(hist_dir)
+              if f.startswith('xonsh-') and f.endswith('.json') ]
+    file_hist = []
+    for f in files:
+        try:
+            file_hist.append(json.load(open(f))['data']['cmds'])
+        except:
+            pass
+    cmds = [ ( c['inp'].replace('\n', ''), c['ts'][0] )
+                 for cmds in file_hist for c in cmds if c]
+    cmds.sort(key=itemgetter(1))
+    cmds = [ c[0] for c in cmds[::-1] ]
+    if session_history:
+        cmds.extend(session_history)
+    # dedupe
+    zip_with_dummy = list(zip(cmds, [0] * len(cmds)))[::-1]
+    cmds = list(OrderedDict(zip_with_dummy).keys())[::-1]
+    cmds = reversed(cmds)
+    if return_list:
+        return cmds
+    else:
+        return '\n'.join(cmds)
+
+
+def _g_change(account):
+    account = account[0]
+    if account=='6syun9': account='6syun9'
+    if account=='shukawai': account='shoge'
+    git config --global user.name f"{account}"
+    if account=='shukawai':
+        git config --global user.email hoge@
+        print(f'change:{account}')
+    elif account=='6syun9':
+        git config --global user.email 6syun9
+        print(f'change:{account}')
+    else:
+        print(f'check account name:{account}')
+aliases['gac']=_g_change
+
+
+def _git_add_peco():
+    print('Added:')
+    for x in $(git diff --name-only | peco).split('\n'):
+        if x:
+            echo @(x.split())
+            git add @(x.split())
+aliases['gap']=_git_add_peco
+
+jap = re.compile('[あ-んア-ン一-鿐]')
+def _eng(x):
+    if len(x)==0: return
+    x = ' '.join(x).replace('\n', ' ')
+    if jap.search(x) is None:
+        y = $(trans en:ja @(x))
+    else:
+        y = $(trans ja:en @(x))
+    return y
+aliases['t'] = _eng
+

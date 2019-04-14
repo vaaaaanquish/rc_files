@@ -1,0 +1,177 @@
+# 補完
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+hook_add = '''
+let g:deoplete#enable_at_startup = 1
+'''
+
+# Pythonの補完
+[[plugins]]
+repo = 'zchee/deoplete-jedi'
+on_ft = 'python3'
+hook_add = '''
+  let g:deoplete#sources#jedi#python_path = '/Users/vanquish/.pyenv/shims/python'
+  let g:deoplete#sources#jedi#server_timeout=100
+  let g:deoplete#sources#jedi#statement_length=100
+'''
+
+# 補完(S-kでdoc string見る用)
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+hook_add = '''
+  let g:jedi#completions_enabled = 0
+'''
+
+# terminalの表示
+[[plugins]]
+repo = 'kassio/neoterm'
+hook_add = '''
+  let g:neoterm_size = 10
+  let g:neoterm_autoinsert = 1
+  let g:neoterm_autoscroll = 1
+  function! TermT()
+    if g:neoterm.has_any()
+      call neoterm#toggle({'mod': '', 'target': 0})
+    else
+      call neoterm#toggle({'mod': 'belowright', 'target': 0})
+    end
+  endfunction
+  nnoremap <silent> <C-t> :call TermT()<CR>
+'''
+
+# pythonシンタックスハイライト
+[[plugins]]
+repo = 'hdima/python-syntax'
+hook_add = '''
+  let python_highlight_all = 1
+  autocmd FileType python setlocal completeopt-=preview
+'''
+
+# オムニ補完
+[[plugins]]
+repo = 'ervandew/supertab'
+hook_add = '''
+  let g:SuperTabContextDefaultCompletionType = "context"
+  let g:SuperTabDefaultCompletionType = "<c-n>"
+'''
+
+# ウィンドウサイズの変更
+[[plugins]]
+repo = 'simeji/winresizer'
+
+# Unite yfファイル閲覧
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+
+# Unite yyヤンク閲覧
+[[plugins]]
+repo = 'Shougo/neoyank.vim'
+
+# Unite
+[[plugins]]
+repo = 'Shougo/unite.vim'
+hook_add = '''
+  let g:unite_enable_start_insert=1
+  let g:unite_source_file_mru_limit=200
+  nnoremap <silent> yy :<C-u>Unite history/yank<CR>
+  nnoremap <silent> yf :<C-u>Unite file<CR>
+  nnoremap <silent> yb :<C-u>Unite buffer<CR>
+  nnoremap <silent> yh :<C-u>Unite file_mru<CR>
+'''
+
+# Markdownのシンタックスハイライト
+[[plugins]]
+repo = 'vim-scripts/Markdown'
+
+# Markdownをブラウザでプレビュー
+[[plugins]]
+repo = 'suan/vim-instant-markdown'
+
+# nerdtree
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+  autocmd StdinReadPre * let s:std_in=1
+  autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+  map <C-n> :NERDTreeToggle<CR>
+  let g:NERDTreeNodeDelimiter = "\u00a0"
+  let g:NERDTreeShowHidden=1
+  let g:NERDTreeIgnore=['\.DS_Store$', '\.git$', '\.clean$', '\.swp$', '\.bak$', '\~$']
+  autocmd bufenter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
+'''
+
+# pythonフォーマッタ
+[[plugins]]
+repo = 'scrooloose/syntastic'
+hook_add = '''
+  let g:syntastic_python_checkers = ["pyflakes", "pep8", "flake8"]
+'''
+
+[[plugins]]
+repo = 'mindriot101/vim-yapf'
+hook_add = '''
+function! s:yapg_format()
+    let cursor = getpos(".")
+    call Yapf()
+    unlet cursor
+endfunction
+autocmd BufWritePre *.py call <SID>yapg_format()
+'''
+
+# monokai
+[[plugins]]
+repo = 'tomasr/molokai'
+hook_add = '''
+  colorscheme molokai
+  set t_Co=256
+  syntax enable
+'''
+
+# Ag検索
+[[plugins]]
+repo = 'rking/ag.vim'
+
+# power line
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+" https://sy-base.com/myrobotics/vim/vim-lightline/
+let g:lightline = {
+    \ 'colorscheme': 'wombat',
+    \ 'active': {
+        \ 'left': [ ['mode', 'paste'], ['readonly', 'filepath', 'modified'] ]
+            \ },
+    \ 'component_function':{
+        \ 'filepath': 'FilePath'
+            \ }
+    \ }
+function! FilePath()
+    if winwidth(0) > 90
+        return expand("%:s")
+    else
+        return expand("%:t")
+    endif
+endfunction
+set laststatus=2
+set noshowmode
+'''
+
+# 閉じカッコの補完
+[[plugins]]
+repo = 'cohama/lexima.vim'
+hook_add = '''
+let g:lexima_no_default_rules = 1
+call lexima#set_default_rules()
+'''
+
+# <C-/><C-/>でコメント
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+
+# vvvで選択範囲拡張
+[[plugins]]
+repo = 'terryma/vim-expand-region'
+hook_add = '''
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+'''
