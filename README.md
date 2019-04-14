@@ -75,6 +75,7 @@ pyenv global 3.6.8
 neovim is god.
 ```
 brew install neovim
+mkdir /tmp/backup/
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 sh ./installer.sh ~/.cache/dein
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -122,6 +123,30 @@ brew install ag
 install
 ```
 pip install -r requirements.txt
+```
+
+
+### jupyter lab
+from requirements.txt
+````
+jupyter serverextension enable --py jupyterlab --sys-prefix
+jupyter notebook --generate-config
+````
+change:
+`~/.jupyter/lab/user-settings/@jupyterlab/*`
+extention:
+```
+jupyter labextension install @lckr/jupyterlab_variableinspector
+jupyter labextension install @jupyterlab/toc
+jupyter labextension install @ryantam626/jupyterlab_code_formatter
+jupyter serverextension enable --py jupyterlab_code_formatter
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
+jupyter nbextension enable --py --sys-prefix widgetsnbextension
+jupyter labextension install @mflevine/jupyterlab_html
+jupyter labextension install @jupyterlab/plotly-extension
+jupyter labextension install jupyterlab_bokeh
+jupyter labextension install ipyvolume
+jupyter labextension install @jupyter-widgets/jupyterlab-manager
 ```
 
 ## check PATH

@@ -23,3 +23,11 @@ pycodestyle
 pyflakes                   
 python-vim                 
 yapf                       
+widgetsnbextension
+seaborn
+jupyterlab_code_formatter
+ipywidgets
+tqdm
+bokeh
+plotly
+pandas-profiling
