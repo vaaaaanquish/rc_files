@@ -88,7 +88,7 @@ augroup vimrc_set_cursorline_only_active_window
   autocmd VimEnter,BufWinEnter,WinEnter * setlocal cursorline
   autocmd WinLeave * setlocal nocursorline
 augroup END
-
+nnoremap nn :set nonumber!<CR>
 
 " ---------------- 検索 ----------------
 set ignorecase  " 検索文字列が小文字の場合は大文字小文字を区別なく検索する
