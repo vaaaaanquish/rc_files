@@ -26,7 +26,7 @@ nnoremap s "_s
 " insert時に行頭へ移動
 inoremap <C-a> <C-o>^
 " insert時に行末へ移動
-inoremap <C-s> <C-o>$
+inoremap <C-e> <C-o>$
 " 自動コメント挿入をオフに
 augroup auto_comment_off
     autocmd!
