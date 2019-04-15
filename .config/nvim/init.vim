@@ -20,6 +20,13 @@ set encoding=utf-8  " ファイルエンコーディング
 set fileencodings=utf-8  " ファイルエンコーディング
 set fileformats=unix,dos,mac  " エンコーディング適応先
 set clipboard=unnamed,unnamedplus  " yankをクリップボードに
+" x,sではyankしない
+nnoremap x "_x
+nnoremap s "_s
+" insert時に行頭へ移動
+inoremap <C-a> <C-o>^
+" insert時に行末へ移動
+inoremap <C-s> <C-o>$
 " 自動コメント挿入をオフに
 augroup auto_comment_off
     autocmd!
@@ -88,7 +95,7 @@ augroup vimrc_set_cursorline_only_active_window
   autocmd VimEnter,BufWinEnter,WinEnter * setlocal cursorline
   autocmd WinLeave * setlocal nocursorline
 augroup END
-nnoremap nn :set nonumber!<CR>
+nnoremap mm :set nonumber!<CR>
 
 " ---------------- 検索 ----------------
 set ignorecase  " 検索文字列が小文字の場合は大文字小文字を区別なく検索する
