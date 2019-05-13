@@ -86,6 +86,8 @@ aliases["vs"] = "nvim ~/.ssh/config"
 aliases["v"] = "nvim"
 aliases["vi"] = "nvim"
 aliases["vim"] = "nvim"
+aliases['tardump'] = 'tar -zcvf'
+aliases['tarload'] = 'tar -zxvf'
 
 
 # xontrib
@@ -252,4 +254,26 @@ def _eng(x):
         y = $(trans ja:en @(x))
     return y
 aliases['t'] = _eng
+
+def _op(x):
+    res = None
+    if not os.path.exists(x):
+        print(f'Not found: {x}')
+    ext = os.path.splitext(x)[1]
+    if ext == '.pkl' or ext == '.pickle':
+        with open(x, 'rb') as f:
+            res = pickle.load(f)
+    elif ext == '.feather':
+        res = pd.read_feather(x)
+    elif ext == '.csv' or ext=='.txt':
+        res = pd.read_csv(x)
+    elif ext == '.tsv':
+        res = pd.read_csv(x, sep='\t')
+    elif ext == '.json':
+        with open(x, 'r') as f:
+            res = json.load(f)
+    else:
+        print(f'unkown file type: {x}')
+    return res
+aliases['op'] = _op
 
