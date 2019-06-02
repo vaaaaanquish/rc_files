@@ -296,5 +296,6 @@ def _git_push(x):
             return
     else:
         x = x[0]
-    print($(git push origin @(x)))
+    print(f'push:{x}')
+    git push origin @(x)
 aliases["gpush"] = _git_push
