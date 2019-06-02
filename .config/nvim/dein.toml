@@ -10,7 +10,7 @@ let g:deoplete#enable_at_startup = 1
 repo = 'zchee/deoplete-jedi'
 on_ft = 'python3'
 hook_add = '''
-  let g:deoplete#sources#jedi#python_path = '/Users/shunsuke.kawai/.pyenv/shims/python'
+  let g:deoplete#sources#jedi#python_path = '/Users/vanquish/.pyenv/shims/python'
   let g:deoplete#sources#jedi#server_timeout=100
   let g:deoplete#sources#jedi#statement_length=100
 '''
