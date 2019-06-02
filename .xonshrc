@@ -75,11 +75,9 @@ aliases['ee'] = "exit"
 aliases["ju"] = "jupyter lab"
 aliases["gb"] = "git branch"
 aliases["gco"] = "git checkout"
-aliases["gc"] = "git commit -m"
 aliases["gd"] = "git diff"
 aliases["ga"] = "git add"
 aliases["gl"] = "git log"
-aliases['gpush'] = "git push"
 aliases['gpull'] = 'git pull'
 aliases["vz"] = "nvim ~/.zshrc"
 aliases["vx"] = "nvim ~/.xonshrc"
@@ -281,3 +279,22 @@ def _op(x):
     return res
 aliases['op'] = _op
 
+
+def _git_commit(x):
+    if len(x)==0:
+        print('set commit message')
+        return
+    x = ' '.join(x)
+    print($(git commit -m @(x)))
+aliases["gc"] = _git_commit
+
+def _git_push(x):
+    if len(x)==0:
+        x = $(git symbolic-ref --short HEAD).replace('\n', '')
+        print(f'push branch:{x}? [y/n]')
+        if sys.stdin.readline().replace('\n', '').lower() != 'y':
+            return
+    else:
+        x = x[0]
+    print($(git push origin @(x)))
+aliases["gpush"] = _git_push
