@@ -36,7 +36,7 @@ hook_add = '''
       call neoterm#toggle({'mod': 'belowright', 'target': 0})
     end
   endfunction
-  nnoremap <silent> <C-t> :call TermT()<CR>
+  nnoremap <Silent> <Space>t :call TermT()<CR>
 '''
 
 # pythonシンタックスハイライト
@@ -73,19 +73,23 @@ repo = 'Shougo/unite.vim'
 hook_add = '''
   let g:unite_enable_start_insert=1
   let g:unite_source_file_mru_limit=200
-  nnoremap <silent> yy :<C-u>Unite history/yank<CR>
-  nnoremap <silent> yf :<C-u>Unite file<CR>
-  nnoremap <silent> yb :<C-u>Unite buffer<CR>
-  nnoremap <silent> yh :<C-u>Unite file_mru<CR>
+  nnoremap <Silent> <Space>y :<C-u>Unite history/yank<CR>
+  nnoremap <Silent> <Space>f :<C-u>Unite file<CR>
+  nnoremap <Silent> <Space>b :<C-u>Unite buffer<CR>
+  nnoremap <Silent> <Space>h :<C-u>Unite file_mru<CR>
 '''
 
 # Markdownのシンタックスハイライト
 [[plugins]]
 repo = 'vim-scripts/Markdown'
 
-# Markdownをブラウザでプレビュー
+# Markdownをブラウザでプレビュー(:InstantMarkdownPreview)
 [[plugins]]
 repo = 'suan/vim-instant-markdown'
+hook_add = '''
+  let g:instant_markdown_autostart = 0
+  map <Space>m :InstantMarkdownPreview<CR>
+'''
 
 # nerdtree
 [[plugins]]
@@ -93,7 +97,7 @@ repo = 'scrooloose/nerdtree'
 hook_add = '''
   autocmd StdinReadPre * let s:std_in=1
   autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-  map <C-n> :NERDTreeToggle<CR>
+  map <Silent> <Space>n :NERDTreeToggle<CR>
   let g:NERDTreeNodeDelimiter = "\u00a0"
   let g:NERDTreeShowHidden=1
   let g:NERDTreeIgnore=['\.DS_Store$', '\.git$', '\.clean$', '\.swp$', '\.bak$', '\~$']
@@ -130,6 +134,9 @@ hook_add = '''
 # Ag検索
 [[plugins]]
 repo = 'rking/ag.vim'
+hook_add = '''
+  map <Space>g :Ag 
+'''
 
 # power line
 [[plugins]]
@@ -175,3 +182,13 @@ hook_add = '''
 vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 '''
+
+# 置換のビジュアライズ
+[[plugins]]
+repo = 'osyo-manga/vim-over'
+hook_add = '''
+cnoreabb <silent><expr>s getcmdtype()==':' && getcmdline()=~'^s' ? 'OverCommandLine<CR><C-u>%s/<C-r>=get([], getchar(0), '')<CR>' : 's'
+nnoremap <silent> <Space>o :OverCommandLine<CR>%s//g<Left><Left>
+vnoremap <silent> <Space>o :OverCommandLine<CR>s//g<Left><Left>
+'''
+

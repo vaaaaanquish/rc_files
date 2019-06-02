@@ -16,6 +16,8 @@ from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit.keys import Keys
 from xonsh.lazyasd import lazyobject
 from collections import Counter
+import pickle
+import pandas
 
 
 $SHELL='/bin/zsh'
@@ -86,6 +88,9 @@ aliases["vs"] = "nvim ~/.ssh/config"
 aliases["v"] = "nvim"
 aliases["vi"] = "nvim"
 aliases["vim"] = "nvim"
+aliases['tardump'] = 'tar -zcvf'
+aliases['tarload'] = 'tar -zxvf'
+aliases['endless'] = 'caffeinate -d -i -m -u -t 999999'
 
 
 # xontrib
@@ -220,14 +225,14 @@ def _get_history(session_history=None, return_list=False):
 
 def _g_change(account):
     account = account[0]
-    if account=='6syun9': account='6syun9'
-    if account=='shukawai': account='shoge'
+    if account=='vanquish': account='6syun9'
+    if account=='shukawai': account='piyo'
     git config --global user.name f"{account}"
     if account=='shukawai':
-        git config --global user.email hoge@
+        git config --global user.email piyo
         print(f'change:{account}')
     elif account=='6syun9':
-        git config --global user.email 6syun9
+        git config --global user.email hoge
         print(f'change:{account}')
     else:
         print(f'check account name:{account}')
@@ -252,4 +257,27 @@ def _eng(x):
         y = $(trans ja:en @(x))
     return y
 aliases['t'] = _eng
+
+def _op(x):
+    '''open pandas'''
+    res = None
+    if not os.path.exists(x):
+        print(f'Not found: {x}')
+    ext = os.path.splitext(x)[1]
+    if ext == '.pkl' or ext == '.pickle':
+        with open(x, 'rb') as f:
+            res = pickle.load(f)
+    elif ext == '.feather':
+        res = pd.read_feather(x)
+    elif ext == '.csv' or ext=='.txt':
+        res = pd.read_csv(x)
+    elif ext == '.tsv':
+        res = pd.read_csv(x, sep='\t')
+    elif ext == '.json':
+        with open(x, 'r') as f:
+            res = json.load(f)
+    else:
+        print(f'unkown file type: {x}')
+    return res
+aliases['op'] = _op
 
