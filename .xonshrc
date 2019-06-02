@@ -149,6 +149,9 @@ def custom_keybindings(bindings, **kw):
     def _engs(event):
         event.current_buffer.insert_text('t """')
         t=$(pbpaste)
+        for w in ['#', '@', '>', '*', '"', "'"]:
+            t = t.replace(w, ' ')
+        t = ' '.join(t.split()).replace('\n', '. ')
         event.current_buffer.insert_text(t)
         event.current_buffer.insert_text('"""')
 
@@ -248,7 +251,7 @@ aliases['gap']=_git_add_peco
 jap = re.compile('[あ-んア-ン一-鿐]')
 def _eng(x):
     if len(x)==0: return
-    x = ' '.join(x).replace('\n', ' ')
+    x = ' '.join(x)
     if jap.search(x) is None:
         y = $(trans en:ja @(x))
     else:
