@@ -1,3 +1,19 @@
+""" pyenv python, rbenv ruby, node.js
+""" pip install from requirement
+""" curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+""" sh ./installer.sh ~/.cache/dein
+""" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+""" vim-monokai
+""" mkdir ~/.vim
+""" cd ~/.vim
+""" mkdir colors
+""" git clone https://github.com/tomasr/molokai
+""" mv molokai/colors/molokai.vim ~/.vim/colors/
+""" rbenv exec gem install redcarpet pygments.rb
+""" npm -g install instant-markdown-d
+
+let root_path = '/Users/shunsuke.kawai/'
+let using_python = root_path . '.pyenv/versions/3.6.8/lib/python3.6/'
 " ---------------- neovim ------------------------
 " shellからESCでcommand modeにする
 tnoremap <silent> <ESC> <C-\><C-n>
@@ -8,7 +24,7 @@ tnoremap <silent> jj <C-\><C-n>
 set shell=/bin/zsh  " shell
 set backspace=indent,eol,start  " バックスペース
 set backup  " バックアップファイ作る
-set backupdir=/tmp/backup/  " backup
+set backupdir=/tmp/  " backup
 set undofile  " undoファイルを生成
 set noswapfile  " スワップファイルを作らない
 set autoread  " 編集中のファイルが変更されたら自動で読み直す
@@ -20,13 +36,6 @@ set encoding=utf-8  " ファイルエンコーディング
 set fileencodings=utf-8  " ファイルエンコーディング
 set fileformats=unix,dos,mac  " エンコーディング適応先
 set clipboard=unnamed,unnamedplus  " yankをクリップボードに
-" x,sではyankしない
-nnoremap x "_x
-nnoremap s "_s
-" insert時に行頭へ移動
-inoremap <C-a> <C-o>^
-" insert時に行末へ移動
-inoremap <C-e> <C-o>$
 " 自動コメント挿入をオフに
 augroup auto_comment_off
     autocmd!
@@ -36,7 +45,10 @@ augroup END
 " xonshファイルもpythonファイルとして扱う
 autocmd BufRead,BufNewFile *.xonshrc setfiletype python
 autocmd BufRead,BufNewFile *.xsh setfiletype python
-
+"行頭へ移動
+inoremap <C-a> <C-o>^
+"行末へ移動
+inoremap <C-e> <C-o>$
 " https://github.com/sentientmachine/Pretty-Vim-Python/
 highlight Comment cterm=bold
 
@@ -57,6 +69,8 @@ augroup END
 let mapleader = "\<Space>"
 " <Space>wを押してファイルを保存する
 nnoremap <Leader>w :w<CR>
+" <Space>qを押してファイルを閉じる
+nnoremap <Leader>q :q<CR>
 " <Space><Space>でビジュアルラインモードに切り替える
 nmap <Leader><Leader> V
 
@@ -88,6 +102,9 @@ set wildmode=list:longest  " コマンドラインの補完
 " 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
+" x,sではyankしない
+nnoremap x "_x
+nnoremap s "_s
 set listchars=tab:^\ ,trail:~  " 行末のスペースを可視化
 " アクティブウィンドウに限りカーソル行(列)を協調
 augroup vimrc_set_cursorline_only_active_window
@@ -106,7 +123,7 @@ set hlsearch  " 検索語をハイライト表示
  " ESC連打でハイライト解除
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
 " POWERLINE
-set rtp+=~/.pyenv/versions/3.6.8/lib/python3.6/site-packages/powerline/bindings/vim/
+exe 'set rtp+=' . using_python . 'site-packages/powerline/bindings/vim/'
 " 検索後にジャンプした際に検索単語を画面中央に持ってくるやつ
 nnoremap n nzz
 nnoremap N Nzz
@@ -130,7 +147,7 @@ cmap w!! w !sudo tee > /dev/null %
 
 
 " ---------------- python ----------------
-let PATH = expand("~/.pyenv/shims") . ":" . $PATH
+let PATH = expand(root_path . ".pyenv/shims") . ":" . $PATH
 if version < 600
   syntax clear
 elseif exists('b:current_after_syntax')
@@ -157,11 +174,12 @@ augroup END
 if &compatible
   set nocompatible
 endif
-set runtimepath+=/Users/vanquish/.cache/dein/repos/github.com/Shougo/dein.vim
-if dein#load_state('/Users/vanquish/.cache/dein')
-  call dein#begin('/Users/vanquish/.cache/dein')
-  call dein#add('/Users/vanquish/.cache/dein/repos/github.com/Shougo/dein.vim')
-  call dein#load_toml('/Users/vanquish/.config/nvim/dein.toml', {'lazy': 0})
+exe 'set runtimepath+='. root_path . '.cache/dein/repos/github.com/Shougo/dein.vim'
+if dein#load_state(root_path . '.cache/dein')
+  call dein#begin(root_path . '.cache/dein')
+  call dein#add(root_path . '.cache/dein/repos/github.com/Shougo/dein.vim')
+  call dein#load_toml(root_path . '.config/nvim/dein.toml', {'lazy': 0})
+  " call dein#load_toml(root_path . '.config/nvim/dein_lazy.toml', {'lazy': 1})
   call dein#end()
   call dein#save_state()
 endif

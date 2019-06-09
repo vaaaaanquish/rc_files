@@ -19,6 +19,7 @@ from collections import Counter
 import pickle
 import pandas
 
+$DIR_HIST_PATH = "/Users/shunsuke.kawai/.dirhist"
 
 $SHELL='/bin/zsh'
 $EDITOR = 'nvim'
@@ -90,6 +91,25 @@ aliases['tardump'] = 'tar -zcvf'
 aliases['tarload'] = 'tar -zxvf'
 aliases['endless'] = 'caffeinate -d -i -m -u -t 999999'
 
+def _git_commit(x):
+    if len(x)==0:
+        print('set commit message')
+        return
+    x = ' '.join(x)
+    print($(git commit -m @(x)))
+aliases["gc"] = _git_commit
+
+def _git_push(x):
+    if len(x)==0:
+        x = $(git symbolic-ref --short HEAD).replace('\n', '')
+        print(f'push branch:{x}? [y/n]')
+        if sys.stdin.readline().replace('\n', '').lower() != 'y':
+            return
+    else:
+        x = x[0]
+    print(f'push:{x}')
+    git push origin @(x)
+aliases["gpush"] = _git_push
 
 # xontrib
 xontrib load z
@@ -99,7 +119,6 @@ $READABLE_TRACE_REVERSE=True
 xontrib load coreutils
 
 # file save dir
-$DIR_HIST_PATH = "/Users/vanquish/.dirhist"
 @events.on_chdir
 def add_to_file(olddir, newdir, **kw):
     with open($DIR_HIST_PATH[0], 'a') as dh:
@@ -283,22 +302,5 @@ def _op(x):
 aliases['op'] = _op
 
 
-def _git_commit(x):
-    if len(x)==0:
-        print('set commit message')
-        return
-    x = ' '.join(x)
-    print($(git commit -m @(x)))
-aliases["gc"] = _git_commit
-
-def _git_push(x):
-    if len(x)==0:
-        x = $(git symbolic-ref --short HEAD).replace('\n', '')
-        print(f'push branch:{x}? [y/n]')
-        if sys.stdin.readline().replace('\n', '').lower() != 'y':
-            return
-    else:
-        x = x[0]
-    print(f'push:{x}')
-    git push origin @(x)
-aliases["gpush"] = _git_push
+aliases['python'] = 'python3'
+aliases['pip'] = 'pip3'
