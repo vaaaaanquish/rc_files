@@ -90,6 +90,8 @@ aliases["vim"] = "nvim"
 aliases['tardump'] = 'tar -zcvf'
 aliases['tarload'] = 'tar -zxvf'
 aliases['endless'] = 'caffeinate -d -i -m -u -t 999999'
+aliases['python'] = 'python3'
+aliases['pip'] = 'pip3'
 
 def _git_commit(x):
     if len(x)==0:
@@ -302,5 +304,15 @@ def _op(x):
 aliases['op'] = _op
 
 
-aliases['python'] = 'python3'
-aliases['pip'] = 'pip3'
+# historyに特定コマンドを保存しないようにする
+def bufappend(self, cmd):
+    if cmd['inp'].strip().split(' ')[0] in ['t', 'ls', 'la', 'l', 'lc', 'lt', 'll', 'lx', 'lf', 'ld']:
+        return None
+    self.buffer.append(cmd)
+    self._len += 1
+    if len(self.buffer) >= self.buffersize:
+        hf = self.flush()
+    else:
+        hf = None
+    return hf
+xonsh.history.json.JsonHistory.append = bufappend
