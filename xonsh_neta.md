@@ -32,6 +32,7 @@
 	- titleや省略されたtext、リンク数、whois、...
 - アラームコマンド
 - プロセスをpecoでまとめてkill
+- https://github.com/what-studio/profiling サポートできそう
 - 色んなファイルを圧縮解凍
 	- https://github.com/oh-my-fish/plugin-extract
     - atool
@@ -62,4 +63,6 @@
     - tmuxに対応するとか
 - git add -p のpecoみたいなやつ
 - なんか時計出すやつ
+    - これ使うとフローティングウィンドウ出せそう
+    - https://github.com/prompt-toolkit/python-prompt-toolkit/blob/master/examples/full-screen/simple-demos/floats.py
 
