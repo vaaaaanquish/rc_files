@@ -34,6 +34,7 @@
 - プロセスをpecoでまとめてkill
 - 色んなファイルを圧縮解凍
 	- https://github.com/oh-my-fish/plugin-extract
+    - atool
 - back directory
 - ptkのウィンドウを使った機能
     - vimのウィンドウが出たので関連の拡張が参考になるかも…？
@@ -56,5 +57,9 @@
     - ある配列にコマンド入れたら補完、補完消し
 - pandasの補完時にめっちゃ説明出てしまうバグ直す
 - socliでスタックオーバーフロー検索
-    - vimモードとの親和性高そうなのでvimモード試す価値ありか
+    - vimモードとの親和性高そうなのでvimモード試す価値あり
+- pyfulサポート https://github.com/anmitsu/pyful/wiki
+    - tmuxに対応するとか
+- git add -p のpecoみたいなやつ
+- なんか時計出すやつ
 
