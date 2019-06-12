@@ -17,7 +17,7 @@ from prompt_toolkit.keys import Keys
 from xonsh.lazyasd import lazyobject
 from collections import Counter
 import pickle
-import pandas
+import pandas as pd
 
 $DIR_HIST_PATH = "/Users/shunsuke.kawai/.dirhist"
 
@@ -280,9 +280,12 @@ def _eng(x):
     return y
 aliases['t'] = _eng
 
-def _op(x):
+def op(x):
     '''open pandas'''
     res = None
+    flag = type(x)==list
+    if flag:
+        x=x[0]
     if not os.path.exists(x):
         print(f'Not found: {x}')
     ext = os.path.splitext(x)[1]
@@ -300,8 +303,11 @@ def _op(x):
             res = json.load(f)
     else:
         print(f'unkown file type: {x}')
-    return res
-aliases['op'] = _op
+    if flag:
+        return res.head(10)
+    else:
+        return res
+aliases['op'] = op
 
 
 # historyに特定コマンドを保存しないようにする
