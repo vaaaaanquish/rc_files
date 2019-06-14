@@ -52,6 +52,7 @@
 - wordcloud化コマンドのサポート
 - sourceコマンドもうちょっと使いやすいやつ
 - googleカレンダー連携して非同期予定取得、prompt表示
+    - https://github.com/pimutils/khal
 - Gmail連携しmail取得、prompt表示
 - slack連携しreply取得、prompt表示
 - 補完の拡張をサポートするxontrib
