@@ -56,7 +56,6 @@
 - slack連携しreply取得、prompt表示
 - 補完の拡張をサポートするxontrib
     - ある配列にコマンド入れたら補完、補完消し
-- pandasの補完時にめっちゃ説明出てしまうバグ直す
 - socliでスタックオーバーフロー検索
     - vimモードとの親和性高そうなのでvimモード試す価値あり
 - pyfulサポート https://github.com/anmitsu/pyful/wiki
