@@ -62,7 +62,7 @@
 - pyfulサポート https://github.com/anmitsu/pyful/wiki
     - tmuxに対応するとか
 - git add -p のpecoみたいなやつ
+- ghq, hubコマンドを上手く使うやつ
 - なんか時計出すやつ
     - これ使うとフローティングウィンドウ出せそう
     - https://github.com/prompt-toolkit/python-prompt-toolkit/blob/master/examples/full-screen/simple-demos/floats.py
-
