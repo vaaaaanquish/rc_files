@@ -70,3 +70,4 @@
     - https://qiita.com/hashimock/items/c9810430498043fd70eb
 - VI_MODE=Trueの時にvim内のpromptでも使えるように
 - ctrl+hjkl使ってる人向けのキーバインド
+- voxをちゃんと使ってみる
