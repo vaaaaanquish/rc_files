@@ -71,3 +71,5 @@
 - VI_MODE=Trueの時にvim内のpromptでも使えるように
 - ctrl+hjkl使ってる人向けのキーバインド
 - voxをちゃんと使ってみる
+- jsonフォーマット
+    - https://github.com/soheilpro/catj
