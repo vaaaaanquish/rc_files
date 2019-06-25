@@ -31,7 +31,6 @@
 - requestsを使ったWebページの概要表示してくれるやつ
 	- titleや省略されたtext、リンク数、whois、...
 - アラームコマンド
-- プロセスをpecoでまとめてkill
 - https://github.com/what-studio/profiling サポートできそう
 - 色んなファイルを圧縮解凍
 	- https://github.com/oh-my-fish/plugin-extract

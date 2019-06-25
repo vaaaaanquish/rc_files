@@ -100,6 +100,12 @@ https://github.com/aksakalli/gtop
 npm install gtop -g
 ```
 
+### fkill
+kill command  
+https://github.com/sindresorhus/fkill-cli
+```
+npm install --global fkill-cli
+```
 
 ### vim markdown
 markdown preview  

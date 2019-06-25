@@ -94,6 +94,7 @@ aliases['python'] = 'python3'
 aliases['pip'] = 'pip3'
 aliases['top'] = 'gtop'
 aliases['htop'] = 'gtop'
+aliases['kill'] = 'fkill'
 
 
 def _git_commit(x):
