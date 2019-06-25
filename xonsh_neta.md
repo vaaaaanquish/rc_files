@@ -44,8 +44,6 @@
     - https://iterm2.com/python-api/tutorial/example.html
     - itermplitを使って何かしらgraphが出ると良いが
 - rm, mv時にバックアップファイルを勝手に作成
-- topの代わりとして使えそうなコマンド
-	- https://wonderwall.hatenablog.com/entry/2017/08/16/115236
 - bulletを使った質疑の例
 	- https://github.com/Mckinsey666/bullet
 	- 多分ptkを使った例の私のブログ記事の内容そのまま代替できる

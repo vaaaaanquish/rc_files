@@ -93,10 +93,18 @@ for neovim
 rbenv exec gem install redcarpet pygments.rb
 ```
 
-### vim markdown
-markdown preview
+### gtop
+top command  
+https://github.com/aksakalli/gtop
 ```
+npm install gtop -g
+```
+
+
+### vim markdown
+markdown preview  
 https://github.com/suan/vim-instant-markdown
+```
 npm -g install instant-markdown-d
 ```
 

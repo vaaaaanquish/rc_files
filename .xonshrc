@@ -92,6 +92,9 @@ aliases['tarload'] = 'tar -zxvf'
 aliases['endless'] = 'caffeinate -d -i -m -u -t 999999'
 aliases['python'] = 'python3'
 aliases['pip'] = 'pip3'
+aliases['top'] = 'gtop'
+aliases['htop'] = 'gtop'
+
 
 def _git_commit(x):
     if len(x)==0:
