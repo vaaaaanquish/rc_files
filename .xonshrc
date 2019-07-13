@@ -79,6 +79,7 @@ aliases["gco"] = "git checkout"
 aliases["gd"] = "git diff"
 aliases["ga"] = "git add"
 aliases["gl"] = "git log"
+aliases["gbrowse"] = "git browse-remote"
 aliases['gpull'] = 'git pull'
 aliases["vz"] = "nvim ~/.zshrc"
 aliases["vx"] = "nvim ~/.xonshrc"
@@ -108,7 +109,7 @@ aliases["gc"] = _git_commit
 def _git_push(x):
     if len(x)==0:
         x = $(git symbolic-ref --short HEAD).replace('\n', '')
-        print(f'push branch:{x}? [y/n]')
+        print(f'push branch:{x}? [y/n]', end=':')
         if sys.stdin.readline().replace('\n', '').lower() != 'y':
             return
     else:

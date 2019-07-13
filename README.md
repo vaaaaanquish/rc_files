@@ -43,6 +43,13 @@ gem install colorls
 source $(dirname $(gem which colorls))/tab_complete.sh
 ```
 
+### git-browse-remote
+git-browse-remote
+https://github.com/motemen/git-browse-remote
+```
+gem install git-browse-remote
+```
+
 ### node
 ```
 brew install nodebrew
