@@ -41,10 +41,12 @@ augroup END
 " xonshファイルもpythonファイルとして扱う
 autocmd BufRead,BufNewFile *.xonshrc setfiletype python
 autocmd BufRead,BufNewFile *.xsh setfiletype python
-"行頭へ移動
+" insert時にctrl+aで行頭へ移動
 inoremap <C-a> <C-o>^
-"行末へ移動
+" insert時にctrl+eで行末へ移動
 inoremap <C-e> <C-o>$
+" insert時にctrl+bでdel
+inoremap <C-b> <BS>
 " https://github.com/sentientmachine/Pretty-Vim-Python/
 highlight Comment cterm=bold
 
