@@ -67,3 +67,4 @@
 - voxをちゃんと使ってみる
 - jsonフォーマット
     - https://github.com/soheilpro/catj
+- gorkartのpickleをよしなに開いたりするやつ
