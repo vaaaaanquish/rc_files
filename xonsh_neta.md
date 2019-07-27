@@ -59,9 +59,6 @@
     - tmuxに対応するとか
 - git add -p のpecoみたいなやつ
 - ghq, hubコマンドを上手く使うやつ
-- なんか時計出すやつ
-    - これ使うとフローティングウィンドウ出せそう
-    - https://github.com/prompt-toolkit/python-prompt-toolkit/blob/master/examples/full-screen/simple-demos/floats.py
 - エディタ用
     - https://qiita.com/hashimock/items/c9810430498043fd70eb
 - VI_MODE=Trueの時にvim内のpromptでも使えるように
@@ -69,3 +66,4 @@
 - voxをちゃんと使ってみる
 - jsonフォーマット
     - https://github.com/soheilpro/catj
+- gorkartのpickleをよしなに開いたりするやつ

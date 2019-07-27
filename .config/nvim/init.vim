@@ -14,10 +14,6 @@
 
 let root_path = '/Users/shunsuke.kawai/'
 let using_python = root_path . '.pyenv/versions/3.6.8/lib/python3.6/'
-" ---------------- neovim ------------------------
-" shellからESCでcommand modeにする
-tnoremap <silent> <ESC> <C-\><C-n>
-tnoremap <silent> jj <C-\><C-n>
 
 
 " ---------------- 入力、システム周り ----------------
@@ -45,10 +41,12 @@ augroup END
 " xonshファイルもpythonファイルとして扱う
 autocmd BufRead,BufNewFile *.xonshrc setfiletype python
 autocmd BufRead,BufNewFile *.xsh setfiletype python
-"行頭へ移動
+" insert時にctrl+aで行頭へ移動
 inoremap <C-a> <C-o>^
-"行末へ移動
+" insert時にctrl+eで行末へ移動
 inoremap <C-e> <C-o>$
+" insert時にctrl+bでdel
+inoremap <C-b> <BS>
 " https://github.com/sentientmachine/Pretty-Vim-Python/
 highlight Comment cterm=bold
 
@@ -73,6 +71,11 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :q<CR>
 " <Space><Space>でビジュアルラインモードに切り替える
 nmap <Leader><Leader> V
+
+" ---------------- neovim term ------------------------
+" shellからESCでcommand modeにする
+tnoremap <silent> <ESC> <C-\><C-n>
+tnoremap <silent> <Leader>j <C-\><C-n>
 
 
 " ---------------- タブ入力 ----------------
@@ -139,7 +142,7 @@ nnoremap sv :<C-u>vs<CR>
 " 縦分割
 nnoremap sp :<C-u>sp<CR>
 " 入力モード中に素早くjjと入力した場合はESCとみなす
-inoremap jj <Esc>
+inoremap <Leader>j <Esc> 
 " vを二回で行末まで選択
 vnoremap v $h
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
