@@ -207,7 +207,7 @@ repo = 'Xuyuanp/nerdtree-git-plugin'
 [[plugins]]
 repo = 'kassio/neoterm'
 hook_add = '''
-  let g:neoterm_size = 10
+  let g:neoterm_size = 30
   let g:neoterm_autoinsert = 1
   let g:neoterm_autoscroll = 1
   function! TermT()

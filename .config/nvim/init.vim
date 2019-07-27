@@ -15,6 +15,54 @@
 let root_path = '/Users/shunsuke.kawai/'
 let using_python = root_path . '.pyenv/versions/3.6.8/lib/python3.6/'
 
+" ---------------- keymap ----------------
+let mapleader = "\<Space>"
+" <Space>wを押してファイルを保存する
+nnoremap <Leader>w :w<CR>
+" <Space>qを押してファイルを閉じる
+nnoremap <Leader>q :q!<CR>
+" <Space><Space>でビジュアルラインモードに切り替える
+nmap <Leader><Leader> V
+" ctrl+aで行頭へ移動
+map <C-a> ^
+inoremap <C-a> <C-o>^
+""" ctrl+eで行末へ移動
+map <C-e> $
+inoremap <C-e> <C-o>$
+" insert時にctrl+bでdel
+inoremap <C-b> <BS>
+" termからESCでcommand modeにする
+tnoremap <silent> <ESC> <C-\><C-n>
+tnoremap <silent> <Leader>j <C-\><C-n>
+" 折り返し時に表示行単位での移動できるようにする
+nnoremap j gj
+nnoremap k gk
+" x,sではyankしない
+nnoremap x "_x
+nnoremap s "_s
+" mmでnonumber
+nnoremap mm :set nonumber!<CR>
+ " ESC連打でハイライト解除
+nmap <Esc><Esc> :nohlsearch<CR><Esc>
+" 検索後にジャンプした際に検索単語を画面中央に持ってくるやつ
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+" 横分割
+nnoremap sv :<C-u>vs<CR>
+" 縦分割
+nnoremap sp :<C-u>sp<CR>
+" 入力モード中に素早くjjと入力した場合はESCとみなす
+inoremap <Leader>j <Esc> 
+" vを二回で行末まで選択
+vnoremap v $h
+" w!! でスーパーユーザーとして保存（sudoが使える環境限定）
+cmap w!! w !sudo tee > /dev/null %
+
+
 
 " ---------------- 入力、システム周り ----------------
 set shell=/bin/zsh  " shell
@@ -22,8 +70,8 @@ set backspace=indent,eol,start  " バックスペース
 set backup  " バックアップファイ作る
 set backupdir=/tmp/  " backup
 set undofile  " undoファイルを生成
-set noswapfile  " スワップファイルを作らない
 set autoread  " 編集中のファイルが変更されたら自動で読み直す
+set noswapfile  " スワップファイルを作らない
 set hidden  " バッファが編集中でもその他のファイルを開けるように
 set showcmd  " 入力中のコマンドをステータスに表示する
 set ambiwidth=double  " 全角文字専用の設定
@@ -41,12 +89,6 @@ augroup END
 " xonshファイルもpythonファイルとして扱う
 autocmd BufRead,BufNewFile *.xonshrc setfiletype python
 autocmd BufRead,BufNewFile *.xsh setfiletype python
-" insert時にctrl+aで行頭へ移動
-inoremap <C-a> <C-o>^
-" insert時にctrl+eで行末へ移動
-inoremap <C-e> <C-o>$
-" insert時にctrl+bでdel
-inoremap <C-b> <BS>
 " https://github.com/sentientmachine/Pretty-Vim-Python/
 highlight Comment cterm=bold
 
@@ -61,21 +103,6 @@ augroup vimrc_restore_cursor_position
   autocmd!
   autocmd BufWinEnter * call s:RestoreCursorPostion()
 augroup END
-
-
-" ---------------- Leader ------------------
-let mapleader = "\<Space>"
-" <Space>wを押してファイルを保存する
-nnoremap <Leader>w :w<CR>
-" <Space>qを押してファイルを閉じる
-nnoremap <Leader>q :q<CR>
-" <Space><Space>でビジュアルラインモードに切り替える
-nmap <Leader><Leader> V
-
-" ---------------- neovim term ------------------------
-" shellからESCでcommand modeにする
-tnoremap <silent> <ESC> <C-\><C-n>
-tnoremap <silent> <Leader>j <C-\><C-n>
 
 
 " ---------------- タブ入力 ----------------
@@ -102,12 +129,6 @@ set matchtime=2
 set matchpairs& matchpairs+=<:>
 set laststatus=2  " ステータスラインを常に表示
 set wildmode=list:longest  " コマンドラインの補完
-" 折り返し時に表示行単位での移動できるようにする
-nnoremap j gj
-nnoremap k gk
-" x,sではyankしない
-nnoremap x "_x
-nnoremap s "_s
 set listchars=tab:^\ ,trail:~  " 行末のスペースを可視化
 " アクティブウィンドウに限りカーソル行(列)を協調
 augroup vimrc_set_cursorline_only_active_window
@@ -115,7 +136,7 @@ augroup vimrc_set_cursorline_only_active_window
   autocmd VimEnter,BufWinEnter,WinEnter * setlocal cursorline
   autocmd WinLeave * setlocal nocursorline
 augroup END
-nnoremap mm :set nonumber!<CR>
+
 
 " ---------------- 検索 ----------------
 set ignorecase  " 検索文字列が小文字の場合は大文字小文字を区別なく検索する
@@ -123,30 +144,8 @@ set smartcase  " 検索文字列に大文字が含まれている場合は区別
 set incsearch  " 検索文字列入力時に順次対象文字列にヒットさせる
 set wrapscan  " 検索時に最後まで行ったら最初に戻る
 set hlsearch  " 検索語をハイライト表示
- " ESC連打でハイライト解除
-nmap <Esc><Esc> :nohlsearch<CR><Esc>
 " POWERLINE
 exe 'set rtp+=' . using_python . 'site-packages/powerline/bindings/vim/'
-" 検索後にジャンプした際に検索単語を画面中央に持ってくるやつ
-nnoremap n nzz
-nnoremap N Nzz
-nnoremap * *zz
-nnoremap # #zz
-nnoremap g* g*zz
-nnoremap g# g#zz
-
-
-" ---------------- マクロ ----------------
-" 横分割
-nnoremap sv :<C-u>vs<CR>
-" 縦分割
-nnoremap sp :<C-u>sp<CR>
-" 入力モード中に素早くjjと入力した場合はESCとみなす
-inoremap <Leader>j <Esc> 
-" vを二回で行末まで選択
-vnoremap v $h
-" w!! でスーパーユーザーとして保存（sudoが使える環境限定）
-cmap w!! w !sudo tee > /dev/null %
 
 
 " ---------------- python ----------------
