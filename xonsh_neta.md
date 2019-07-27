@@ -3,7 +3,6 @@
 - rsyncコマンドの拡張
 - Macの通知センター叩くやつ
 - slack通知叩くやつ
-- 起動の疑似高速化(一時的にsh表示してoverrideする)
 - voxのpyenv拡張
     - https://t.co/bObjxWGvGt
 - bookmark dirのz, peco
