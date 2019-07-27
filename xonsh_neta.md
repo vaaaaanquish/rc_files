@@ -67,3 +67,4 @@
 - jsonフォーマット
     - https://github.com/soheilpro/catj
 - gorkartのpickleをよしなに開いたりするやつ
+- fzf試す
