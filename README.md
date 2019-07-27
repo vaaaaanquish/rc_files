@@ -186,3 +186,9 @@ $DIR_HIST_PATH
 - .zshrc
 export PATH="/Users/vanquish/homebrew/bin:$PATH"
 ```
+
+### app
+
+install Karabiner-Elements  
+https://pqrs.org/osx/karabiner/  
+using vim mode

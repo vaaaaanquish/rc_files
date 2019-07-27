@@ -44,6 +44,10 @@ nnoremap s "_s
 nnoremap mm :set nonumber!<CR>
  " ESC連打でハイライト解除
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
+" wを2回で単語選択
+inoremap <silent> ww <Esc>viw
+" 入力モード中にSpace+0と入力した場合はESCとみなす
+inoremap <Leader>0 <Esc> 
 " 検索後にジャンプした際に検索単語を画面中央に持ってくるやつ
 nnoremap n nzz
 nnoremap N Nzz
@@ -55,10 +59,6 @@ nnoremap g# g#zz
 nnoremap sv :<C-u>vs<CR>
 " 縦分割
 nnoremap sp :<C-u>sp<CR>
-" 入力モード中に素早くjjと入力した場合はESCとみなす
-inoremap <Leader>j <Esc> 
-" vを二回で行末まで選択
-vnoremap v $h
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
 cmap w!! w !sudo tee > /dev/null %
 
