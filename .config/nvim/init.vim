@@ -10,8 +10,7 @@
 """ git clone https://github.com/tomasr/molokai
 """ mv molokai/colors/molokai.vim ~/.vim/colors/
 """ rbenv exec gem install redcarpet pygments.rb
-""" npm -g install instant-markdown-d
-
+""" npm -g install instant-markdown-d 
 let root_path = '/Users/shunsuke.kawai/'
 let using_python = root_path . '.pyenv/versions/3.6.8/lib/python3.6/'
 
@@ -33,7 +32,7 @@ inoremap <C-e> <C-o>$
 inoremap <C-b> <BS>
 " termからESCでcommand modeにする
 tnoremap <silent> <ESC> <C-\><C-n>
-tnoremap <silent> <Leader>j <C-\><C-n>
+tnoremap <silent> <Leader>0 <C-\><C-n>
 " 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
