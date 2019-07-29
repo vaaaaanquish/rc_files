@@ -281,7 +281,7 @@ def _eng(x):
     if jap.search(x) is None:
         y = $(trans en:ja @(x))
     else:
-        y = $(trans ja:en @(x))
+        y = $(echo @(x) | xargs trans ja:en)
     return y
 aliases['t'] = _eng
 
