@@ -3,7 +3,9 @@
 ### install iTerm2
 using config from dropbox  
 ```
-/Users/vanquish/Dropbox/iterm
+mkdir ~/work
+mkdir ~/work/iterm
+cp ./com.googlecode.iterm2.plist ~/work/iterm
 ```
 
 ### install brew

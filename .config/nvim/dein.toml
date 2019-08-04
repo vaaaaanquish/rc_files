@@ -19,7 +19,7 @@ hook_add = '''
 repo = 'zchee/deoplete-jedi'
 on_ft = 'python3'
 hook_add = '''
-  let g:deoplete#sources#jedi#python_path = '~/.pyenv/shims/python'
+  let g:deoplete#sources#jedi#python_path = '/Users/shunsuke.kawai/.pyenv/shims/python'
   let g:deoplete#sources#jedi#server_timeout=100
   let g:deoplete#sources#jedi#statement_length=100
 '''
@@ -86,7 +86,10 @@ hook_add = '''
 [[plugins]]
 repo = 'scrooloose/syntastic'
 hook_add = '''
-  let g:syntastic_python_checkers = ["pyflakes", "pep8", "flake8"]
+  let g:syntastic_python_checkers = ["pep8", "flake8", "pyflake"]
+  set statusline+=%#warningmsg#
+  set statusline+=%{SyntasticStatuslineFlag()}
+  set statusline+=%*
 '''
 
 [[plugins]]
@@ -99,16 +102,6 @@ hook_add = '''
   endfunction
   autocmd BufWritePre *.py call <SID>yapg_format()
 '''
-
-# monokai
-[[plugins]]
-repo = 'tomasr/molokai'
-hook_add = '''
-  colorscheme molokai
-  set t_Co=256
-  syntax enable
-'''
-
 
 # power line
 [[plugins]]
@@ -253,4 +246,15 @@ repo = 'tpope/vim-surround'
 # surroundをドットコマンドで繰り返す
 [[plugins]]
 repo = 'tpope/vim-repeat'
+
+# monokai
+[[plugins]]
+repo = 'tomasr/molokai'
+hook_add = '''
+  colorscheme molokai
+  syntax enable
+  let g:molokai_original = 1
+  set t_Co=256
+'''
+
 

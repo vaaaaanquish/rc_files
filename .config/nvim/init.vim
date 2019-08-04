@@ -10,9 +10,11 @@
 """ git clone https://github.com/tomasr/molokai
 """ mv molokai/colors/molokai.vim ~/.vim/colors/
 """ rbenv exec gem install redcarpet pygments.rb
-""" npm -g install instant-markdown-d 
+""" npm -g install instant-markdown-d
+
 let root_path = '/Users/shunsuke.kawai/'
 let using_python = root_path . '.pyenv/versions/3.6.8/lib/python3.6/'
+
 
 " ---------------- keymap ----------------
 let mapleader = "\<Space>"
@@ -63,14 +65,16 @@ cmap w!! w !sudo tee > /dev/null %
 
 
 
+
+
 " ---------------- 入力、システム周り ----------------
 set shell=/bin/zsh  " shell
 set backspace=indent,eol,start  " バックスペース
 set backup  " バックアップファイ作る
 set backupdir=/tmp/  " backup
 set undofile  " undoファイルを生成
-set autoread  " 編集中のファイルが変更されたら自動で読み直す
 set noswapfile  " スワップファイルを作らない
+set autoread  " 編集中のファイルが変更されたら自動で読み直す
 set hidden  " バッファが編集中でもその他のファイルを開けるように
 set showcmd  " 入力中のコマンドをステータスに表示する
 set ambiwidth=double  " 全角文字専用の設定
@@ -102,6 +106,7 @@ augroup vimrc_restore_cursor_position
   autocmd!
   autocmd BufWinEnter * call s:RestoreCursorPostion()
 augroup END
+
 
 
 " ---------------- タブ入力 ----------------
@@ -189,4 +194,8 @@ if dein#check_install()
 endif
 filetype plugin indent on
 syntax enable
+
+" ---------------- background black --------------
+highlight Normal ctermbg=NONE
+highlight nonText ctermbg=NONE
 
