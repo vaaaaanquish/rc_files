@@ -31,6 +31,5 @@ tqdm
 bokeh
 plotly
 pandas-profiling
-jupyterlab_table
 opencv-python
 gnureadline
