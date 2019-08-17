@@ -138,7 +138,10 @@ if 'ZSH_FLAG' in ${...}:
         return '{INTENSE_GREEN}' + $(git config user.name).strip() + ':' + $WORK_MODE +':{curr_branch}{WHITE} ( {YELLOW}"{cwd}" {WHITE}) {INTENSE_RED}$ '
     $PROMPT = get_git_user
 else:
-    $PL_COLORS = {"cwd": ("BLACK", "#a6e22e")}
+    $PL_COLORS = {
+            "cwd": ("BLACK", "#a6e22e"),
+            "git_root": ("#f92672", ""),
+            "git_sub_dir": ("BLACK","")}
     $PL_EXTRA_SEC = {"user": lambda: [' {user} ', 'BLACK', '#fd971f'], "mode": lambda: [f' {$WORK_MODE} ', 'BLACK', '#ae81ff']}
     $PL_PROMPT='user>mode>cwd>branch'
     $PL_TOOLBAR='!'
