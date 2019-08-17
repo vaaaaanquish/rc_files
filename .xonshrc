@@ -47,8 +47,9 @@ $PATH.append(expanduser('~/work/bin/google-cloud-sdk/bin'))
 source-bash @(expanduser('~/work/bin/google-cloud-sdk/path.bash.inc'))
 source-bash @(expanduser('~/work/bin/google-cloud-sdk/completion.bash.inc'))
 # Editor
-$EDITOR = 'nvim'
-$VISUAL = 'nvim'
+os.environ.update({'EDITOR': expanduser('~/homebrew/bin/nvim')})
+$EDITOR = expanduser('~/homebrew/bin/nvim')
+$VISUAL = expanduser('~/homebrew/bin/nvim')
 $VI_MODE = False
 $COMPLETIONS_CONFIRM = True
 $IGNOREEOF = True
@@ -140,7 +141,7 @@ if 'ZSH_FLAG' in ${...}:
 else:
     $PL_COLORS = {
             "cwd": ("BLACK", "#a6e22e"),
-            "git_root": ("#f92672", ""),
+            "git_root": ("BLUE", ""),
             "git_sub_dir": ("BLACK","")}
     $PL_EXTRA_SEC = {"user": lambda: [' {user} ', 'BLACK', '#fd971f'], "mode": lambda: [f' {$WORK_MODE} ', 'BLACK', '#ae81ff']}
     $PL_PROMPT='user>mode>cwd>branch'
