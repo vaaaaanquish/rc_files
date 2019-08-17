@@ -100,7 +100,9 @@ hook_add = '''
     call Yapf()
     unlet cursor
   endfunction
-  autocmd BufWritePre *.py call <SID>yapg_format()
+  if $WORK_MODE=='m3'
+    autocmd BufWritePre *.py call <SID>yapg_format()
+  endif
 '''
 
 # power line
@@ -200,6 +202,7 @@ repo = 'Xuyuanp/nerdtree-git-plugin'
 [[plugins]]
 repo = 'kassio/neoterm'
 hook_add = '''
+  set sh=zsh
   let g:neoterm_size = 30
   let g:neoterm_autoinsert = 1
   let g:neoterm_autoscroll = 1

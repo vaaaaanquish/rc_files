@@ -18,10 +18,35 @@ from xonsh.lazyasd import lazyobject
 from collections import Counter
 import pickle
 import pandas as pd
+from os.path import expanduser
+from prompt_toolkit import print_formatted_text
+from prompt_toolkit.styles import Style
 
-$DIR_HIST_PATH = "/Users/shunsuke.kawai/.dirhist"
-
-$SHELL='/bin/zsh'
+# --------------------
+# ENV and PATH
+# --------------------
+# bash
+source-bash $(/usr/libexec/path_helper -s)
+source-bash --seterrprevcmd "" /etc/profile
+source-bash @(expanduser('~/homebrew/etc/profile.d/bash_completion.sh'))
+$PATH.append(expanduser('~/.local/bin'))
+# nodebrew
+$PATH.append(expanduser('~/.nodebrew/current/bin'))
+# rbenv
+$PATH.append(expanduser('~/.rbenv/bin'))
+source-bash $(rbenv init -)
+# trans
+$PATH.append(expanduser('~/work/bin'))
+# docker for mac
+$PATH.append('/usr/local/bin')
+# homebrew
+$PATH.append(expanduser("~/homebrew/bin"))
+$PATH.append(expanduser("~/bin"))
+# gcloud(install時にPATHを聞かれるのでそこで指定)
+$PATH.append(expanduser('~/work/bin/google-cloud-sdk/bin'))
+source-bash @(expanduser('~/work/bin/google-cloud-sdk/path.bash.inc'))
+source-bash @(expanduser('~/work/bin/google-cloud-sdk/completion.bash.inc'))
+# Editor
 $EDITOR = 'nvim'
 $VISUAL = 'nvim'
 $VI_MODE = False
@@ -35,9 +60,6 @@ $AUTO_CD = True
 $XONSH_SHOW_TRACEBACK = True
 $SUPPRESS_BRANCH_TIMEOUT_MESSAGE = True
 $UPDATE_COMPLETIONS_ON_KEYPRESS = True
-def get_git_user():
-    return '{INTENSE_GREEN}' + $(git config user.name).strip() + ':{curr_branch}{WHITE} ( {YELLOW}"{cwd}" {WHITE}) {INTENSE_RED}$ '
-$PROMPT = get_git_user
 $LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30"
 $XONSH_HISTORY_SIZE = (3000, 'commands')
 XONSH_HISTORY_MATCH_ANYWHERE = True
@@ -51,8 +73,12 @@ $PTK_STYLE_OVERRIDES={
  "auto-suggestion": "ansibrightblack",
  "aborting": "ansibrightblack",
  }
+$DIR_HIST_PATH = expanduser("~/.dirhist")
 
 
+# --------------------
+# aliases
+# --------------------
 if platform.system() == 'Darwin':
     aliases["ls"] = "ls -hG"
     aliases["lc"] = "colorls --sf"
@@ -74,6 +100,7 @@ else:
     aliases['wf'] = 'watch free -h'
 aliases['ee'] = "exit"
 aliases["ju"] = "jupyter lab"
+aliases['jul'] = 'jupyter lab'
 aliases["gb"] = "git branch"
 aliases["gco"] = "git checkout"
 aliases["gd"] = "git diff"
@@ -91,14 +118,120 @@ aliases["vim"] = "nvim"
 aliases['tardump'] = 'tar -zcvf'
 aliases['tarload'] = 'tar -zxvf'
 aliases['endless'] = 'caffeinate -d -i -m -u -t 999999'
-aliases['python'] = 'python3'
-aliases['pip'] = 'pip3'
+aliases['kill'] = 'fkill'
 aliases['top'] = 'gtop'
 aliases['htop'] = 'gtop'
-aliases['kill'] = 'fkill'
+
+
+# --------------------
+# xontrib
+# --------------------
+xontrib load z
+xontrib load readable-traceback
+$READABLE_TRACE_STRIP_PATH_ENV=True
+$READABLE_TRACE_REVERSE=True
+xontrib load coreutils
+
+# zshから呼び出された場合はpowerline使わない
+if 'ZSH_FLAG' in ${...}:
+    def get_git_user():
+        return '{INTENSE_GREEN}' + $(git config user.name).strip() + ':' + $WORK_MODE +':{curr_branch}{WHITE} ( {YELLOW}"{cwd}" {WHITE}) {INTENSE_RED}$ '
+    $PROMPT = get_git_user
+else:
+    $PL_COLORS = {"cwd": ("BLACK", "#a6e22e")}
+    $PL_EXTRA_SEC = {"user": lambda: [' {user} ', 'BLACK', '#fd971f'], "mode": lambda: [f' {$WORK_MODE} ', 'BLACK', '#ae81ff']}
+    $PL_PROMPT='user>mode>cwd>branch'
+    $PL_TOOLBAR='!'
+    $PL_RPROMPT='!'
+    xontrib load powerline
+
+
+# --------------------
+# events
+# --------------------
+
+@events.on_chdir
+def add_to_file(olddir, newdir, **kw):
+    """移動したディレクトリを保存"""
+    with open($DIR_HIST_PATH[0], 'a') as dh:
+        print(newdir, file=dh)
+
+
+# --------------------
+# Keybindings
+# --------------------
+def z():
+    """zコマンド用"""
+    lines = open($DIR_HIST_PATH[0]).read().rstrip("\n").split("\n")
+    return("\n".join([p for p, c in Counter(lines).most_common()]))
+
+@events.on_ptk_create
+def custom_keybindings(bindings, **kw):
+
+    @bindings.add('c-v')
+    def edit_in_editor(event):
+        """コンソール入力をvimで開く"""
+        event.current_buffer.tempfile_suffix = '.xsh'
+        event.current_buffer.open_in_editor(event.cli)
+
+    @bindings.add('c-r')
+    def select_history(event):
+        """履歴をpecoる"""
+        sess_history = $(history).split('\n')
+        hist = _get_history(sess_history)
+        selected = $(echo @(hist) | peco)
+        event.current_buffer.insert_text(selected.strip())
+
+    @bindings.add('c-s')
+    def select_ssh(event):
+        """ssh先をpecoる"""
+        hosts = _get_host(True)
+        selected = $(echo @(hosts) | peco)
+        if selected:
+            event.current_buffer.insert_text('ssh ' + selected.strip().split(', ')[0])
+
+    @bindings.add('c-f')
+    def select_file(event):
+        """今いるディレクトリの中のファイルをpecoる"""
+        r = lambda x: './'+x if os.path.isdir(x) else x
+        files = '\n'.join([r(x.split(' ')[-1]) for x in $(ls -l).split('\n')])
+        selected = $(echo @(files) | peco)
+        event.current_buffer.insert_text(selected.strip())
+
+    @bindings.add('c-d')
+    def _z(event):
+        """ディレクトリの履歴をpecoる"""
+        selected = $(echo @(z()) | peco)
+        cd_cmd = "cd " + selected.strip()
+        event.current_buffer.insert_text(cd_cmd)
+
+    @bindings.add('c-t')
+    def _engs(event):
+        """クリップボードを翻訳コマンド形式で入力"""
+        event.current_buffer.insert_text('t """')
+        t=$(pbpaste)
+        for w in ['#', '@', '>', '*', '"', "'"]:
+            t = t.replace(w, ' ')
+        t = ' '.join(t.split()).replace('\n', '. ')
+        event.current_buffer.insert_text(t)
+        event.current_buffer.insert_text('"""')
+
+
+# --------------------
+# commands
+# --------------------
+def _git_add_peco():
+    """pecoってgit addする"""
+    print('Added:')
+    for x in $(git diff --name-only | peco).split('\n'):
+        if x:
+            echo @(x.split())
+            git add @(x.split())
+aliases['gap']=_git_add_peco
 
 
 def _git_commit(x):
+    """gcコマンド引数を全てメッセージとして連結"""
     if len(x)==0:
         print('set commit message')
         return
@@ -106,7 +239,9 @@ def _git_commit(x):
     print($(git commit -m @(x)))
 aliases["gc"] = _git_commit
 
+
 def _git_push(x):
+    """今いるbranchにpushする"""
     if len(x)==0:
         x = $(git symbolic-ref --short HEAD).replace('\n', '')
         print(f'push branch:{x}? [y/n]', end=':')
@@ -118,78 +253,14 @@ def _git_push(x):
     git push origin @(x)
 aliases["gpush"] = _git_push
 
-# xontrib
-xontrib load z
-xontrib load readable-traceback
-$READABLE_TRACE_STRIP_PATH_ENV=True
-$READABLE_TRACE_REVERSE=True
-xontrib load coreutils
 
-# file save dir
-@events.on_chdir
-def add_to_file(olddir, newdir, **kw):
-    with open($DIR_HIST_PATH[0], 'a') as dh:
-        print(newdir, file=dh)
-
-# z
-def z():
-    lines = open($DIR_HIST_PATH[0]).read().rstrip("\n").split("\n")
-    return("\n".join([p for p, c in Counter(lines).most_common()]))
-
-@events.on_ptk_create
-def custom_keybindings(bindings, **kw):
-
-    @bindings.add('c-v')
-    def edit_in_editor(event):
-        event.current_buffer.tempfile_suffix = '.xsh'
-        event.current_buffer.open_in_editor(event.cli)
-
-    @bindings.add('c-r')
-    def select_history(event):
-        sess_history = $(history).split('\n')
-        hist = _get_history(sess_history)
-        selected = $(echo @(hist) | peco)
-        event.current_buffer.insert_text(selected.strip())
-
-    @bindings.add('c-s')
-    def select_ssh(event):
-        hosts = _get_host(True)
-        selected = $(echo @(hosts) | peco)
-        if selected:
-            event.current_buffer.insert_text('ssh ' + selected.strip().split(', ')[0])
-
-    @bindings.add('c-f')
-    def select_file(event):
-        r = lambda x: './'+x if os.path.isdir(x) else x
-        files = '\n'.join([r(x.split(' ')[-1]) for x in $(ls -l).split('\n')])
-        selected = $(echo @(files) | peco)
-        event.current_buffer.insert_text(selected.strip())
-
-    @bindings.add('c-d')
-    def _z(event):
-        selected = $(echo @(z()) | peco)
-        cd_cmd = "cd " + selected.strip()
-        event.current_buffer.insert_text(cd_cmd)
-
-    @bindings.add('c-t')
-    def _engs(event):
-        event.current_buffer.insert_text('t """')
-        t=$(pbpaste)
-        for w in ['#', '@', '>', '*', '"', "'"]:
-            t = t.replace(w, ' ')
-        t = ' '.join(t.split()).replace('\n', '. ')
-        event.current_buffer.insert_text(t)
-        event.current_buffer.insert_text('"""')
-
-
-from prompt_toolkit import print_formatted_text
-from prompt_toolkit.styles import Style
-inquirer_style = Style.from_dict({
-    'qa': '#5F819D',
-    'qu': '#FF9D00',
-    'dp': '#000'
-})
 def _get_host(color=False):
+    """sshホスト一覧を表示したり取得したりする"""
+    inquirer_style = Style.from_dict({
+        'qa': '#5F819D',
+        'qu': '#FF9D00',
+        'dp': '#000'
+    })
     all_text = ''
     text = ''
     for x in $(cat ~/.ssh/config).split('\n'):
@@ -225,6 +296,7 @@ aliases['host']=_get_host
 
 
 def _get_history(session_history=None, return_list=False):
+    """historyを取得する"""
     hist_dir = __xonsh__.env['XONSH_DATA_DIR']
     files = [ os.path.join(hist_dir,f) for f in os.listdir(hist_dir)
               if f.startswith('xonsh-') and f.endswith('.json') ]
@@ -251,6 +323,7 @@ def _get_history(session_history=None, return_list=False):
 
 
 def _g_change(account):
+    """gitのアカウントを変える"""
     account = account[0]
     if account=='vanquish': account='6syun9'
     if account=='shukawai': account='piyo'
@@ -266,16 +339,9 @@ def _g_change(account):
 aliases['gac']=_g_change
 
 
-def _git_add_peco():
-    print('Added:')
-    for x in $(git diff --name-only | peco).split('\n'):
-        if x:
-            echo @(x.split())
-            git add @(x.split())
-aliases['gap']=_git_add_peco
-
 jap = re.compile('[あ-んア-ン一-鿐]')
 def _eng(x):
+    """翻訳コマンド"""
     if len(x)==0: return
     x = ' '.join(x)
     if jap.search(x) is None:
@@ -285,8 +351,9 @@ def _eng(x):
     return y
 aliases['t'] = _eng
 
+
 def op(x):
-    '''open pandas'''
+    '''ファイルをよしなに開くやつ'''
     res = None
     flag = type(x)==list
     if flag:
@@ -315,8 +382,8 @@ def op(x):
 aliases['op'] = op
 
 
-# historyに特定コマンドを保存しないようにする
 def bufappend(self, cmd):
+    """historyに特定コマンドを保存しないようにする"""
     if cmd['inp'].strip().split(' ')[0] in ['t', 'ls', 'la', 'l', 'lc', 'lt', 'll', 'lx', 'lf', 'ld']:
         return None
     self.buffer.append(cmd)
@@ -327,3 +394,27 @@ def bufappend(self, cmd):
         hf = None
     return hf
 xonsh.history.json.JsonHistory.append = bufappend
+
+
+def _mchange(x):
+    """開発モードを変更する"""
+    if x and x[0] == 'm3':
+        cp ~/.config/flake8_m3 ~/.config/flake8
+        cp ~/.config/pep8_m3 ~/.config/pep8
+        cp ~/.config/pip/pip_m3.conf ~/.config/pip/pip.conf
+        cp ~/.config/pycodestyle_m3 ~/.config/pycodestyle
+        cp ~/.config/yapf/style_m3 ~/.config/yapf/style
+        if os.path.exists(os.environ['HOME']+'/.xonshrc_m3'):
+            source ~/.xonshrc_m3
+        $WORK_MODE = 'M3'
+    else:
+        rm ~/.config/flake8
+        rm ~/.config/pep8
+        rm ~/.config/pip/pip.conf
+        rm ~/.config/pycodestyle
+        rm ~/.config/yapf/style
+        $WORK_MODE = 'Global'
+aliases['mc'] = _mchange
+$WORK_MODE = 'm3'
+mc m3
+

@@ -499,7 +499,7 @@
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
-			<string>/Users/shunsuke.kawai/homebrew/bin/zsh</string>
+			<string>/Users/shunsuke.kawai/homebrew/versions/3.6.8/bin/xonsh</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Blue Component</key>
@@ -1522,7 +1522,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>9170C67F-2B45-4B2C-B86B-B4F25EB1B32D</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>3</integer>
+	<integer>11</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2215,6 +2215,19 @@
 			</dict>
 		</array>
 	</dict>
+	<key>NoSyncSearchHistory</key>
+	<array>
+		<string>citation</string>
+		<string>idlTask</string>
+		<string>dlTask</string>
+		<string>gdlTask</string>
+		<string>godlTask</string>
+		<string>gokdlTask</string>
+		<string>gokadlTask</string>
+		<string>gokardlTask</string>
+		<string>gokartdlTask</string>
+		<string>gokart.dlTask</string>
+	</array>
 	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
 	<real>570938945.60600901</real>
 	<key>OpenArrangementAtStartup</key>
@@ -2294,6 +2307,8 @@
 	<true/>
 	<key>WordCharacters</key>
 	<string>/-+\~_.</string>
+	<key>findMode_iTerm</key>
+	<integer>0</integer>
 	<key>iTerm Version</key>
 	<string>3.3.0</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
