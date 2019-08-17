@@ -69,15 +69,7 @@ npm -v
 
 ### python
 ```
-brew install pyenv
-cat << 'EOS' >> ~/.bash_profile
-if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-EOS
-source ~/.bash_profile
-source ~/.zshrc
-pyenv install -l
-pyenv install 3.6.8
-pyenv global 3.6.8
+brew install python
 ```
 
 ### nvim
