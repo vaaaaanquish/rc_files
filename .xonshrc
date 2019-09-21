@@ -147,7 +147,7 @@ else:
     $PL_PROMPT='user>mode>cwd>branch'
     $PL_TOOLBAR='!'
     $PL_RPROMPT='!'
-    xontrib load powerline
+    xontrib load powerline2
 
 
 # --------------------
@@ -299,6 +299,56 @@ def _get_host(color=False):
 aliases['host']=_get_host
 
 
+# _get_host()してparse
+def _ssh_host_to_dic():
+    host = {}
+    for x in _get_host(True).split('\n'):
+        rows = x.split(', ')
+        if len(rows)>=2:
+            host[rows[0]]={'s':rows[1], 'p':None}
+        if len(rows)==3:
+            host[rows[0]]['p']=rows[2]
+    return host
+
+# config生成
+def _w_host(host):
+    with open('/users/shunsuke.kawai/.ssh/config', 'w') as f:
+        f.write('HostKeyAlgorithms +ssh-dss\n')
+        f.write('AddKeysToAgent yes\n')
+        f.write('host *\n')
+        f.write('    ForwardAgent yes\n')
+        f.write('    StrictHostKeyChecking no\n')
+        for k,v in host.items():
+            f.write('\nHost {}\n'.format(k))
+            f.write('    HostName {}\n'.format(v['s']))
+            if k != 'hoge':
+                if k=='kawai':
+                    f.write('    User ubuntu\n')
+                    f.write('    IdentityFile /users/shunsuke.kawai/.ssh/aws-kawai.pem\n')
+                else:
+                    f.write('    IdentityFile /users/shunsuke.kawai/.ssh/tmp\n')
+                f.write('    IdentitiesOnly yes\n')
+                if v['p'] is not None:
+                    f.write('    LocalForward {} localhost:{}\n'.format(v['p'],v['p'])) #LocalForward
+
+import argparse
+def _update_host(args):
+    host = _ssh_host_to_dic()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('name')
+    parser.add_argument('-s')
+    parser.add_argument('-p')
+    args = parser.parse_args(args)
+    if args.name not in host.keys():
+        host[args.name]={'s':None, 'p':None}
+    if args.s is not None:
+        host[args.name]['s'] = args.s
+    if args.p is not None:
+        host[args.name]['p'] = args.p
+    _w_host(host)
+aliases['uh'] = _update_host
+
+
 def _get_history(session_history=None, return_list=False):
     """historyを取得する"""
     hist_dir = __xonsh__.env['XONSH_DATA_DIR']
@@ -325,22 +375,6 @@ def _get_history(session_history=None, return_list=False):
     else:
         return '\n'.join(cmds)
 
-
-def _g_change(account):
-    """gitのアカウントを変える"""
-    account = account[0]
-    if account=='vanquish': account='6syun9'
-    if account=='shukawai': account='piyo'
-    git config --global user.name f"{account}"
-    if account=='shukawai':
-        git config --global user.email piyo
-        print(f'change:{account}')
-    elif account=='6syun9':
-        git config --global user.email hoge
-        print(f'change:{account}')
-    else:
-        print(f'check account name:{account}')
-aliases['gac']=_g_change
 
 
 jap = re.compile('[あ-んア-ン一-鿐]')
@@ -417,8 +451,36 @@ def _mchange(x):
         rm ~/.config/pip/pip.conf
         rm ~/.config/pycodestyle
         rm ~/.config/yapf/style
-        $WORK_MODE = 'Global'
+        $WORK_MODE = 'GLB'
 aliases['mc'] = _mchange
 $WORK_MODE = 'm3'
 mc m3
+
+
+def _aget():
+    t={}
+    for x in json.loads($(aws ec2 describe-instances))['Reservations']:
+        for y in x['Instances']:
+            if y['KeyName']:
+                t.update({y['KeyName']: {'dns':y['PublicDnsName'], 'id':y['InstanceId']}})
+    return t
+
+def jsonaget():
+    return json.dumps(_aget(), indent=4)
+aliases['aget'] = jsonaget
+
+def _astop():
+    t = _aget()
+    aws ec2 stop-instances --instance-ids @(t['aws-kawai']['id'])
+aliases['astop'] = _astop
+
+def _astart():
+    t = _aget()
+    aws ec2 start-instances --instance-ids @(t['aws-kawai']['id'])
+aliases['astart'] = _astart
+
+def _ahost():
+    t = _aget()
+    uh kawai -s @(t['aws-kawai']['dns'])
+aliases['ahost'] = _ahost
 
