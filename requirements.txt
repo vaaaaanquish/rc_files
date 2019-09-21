@@ -13,6 +13,7 @@ scipy
 xonsh                      
 xontrib-readable-traceback 
 xontrib-z                  
+xontrib-powerline2
 flake8                     
 japanize-matplotlib        
 jedi                       
