@@ -109,6 +109,7 @@ aliases["ga"] = "git add"
 aliases["gl"] = "git log"
 aliases["gbrowse"] = "git browse-remote"
 aliases['gpull'] = 'git pull'
+aliases['gclone'] = 'git clone'
 aliases["vz"] = "nvim ~/.zshrc"
 aliases["vx"] = "nvim ~/.xonshrc"
 aliases["vv"] = "nvim ~/.config/nvim"
@@ -179,12 +180,9 @@ def custom_keybindings(bindings, **kw):
         event.current_buffer.open_in_editor(event.cli)
 
     @bindings.add('c-r')
-    def select_history(event):
-        """履歴をpecoる"""
-        sess_history = $(history).split('\n')
-        hist = _get_history(sess_history)
-        selected = $(echo @(hist) | peco)
-        event.current_buffer.insert_text(selected.strip())
+    def jump_lastline(event):
+        """最終行に飛ぶ"""
+        event.current_buffer.cursor_position=len(event.current_buffer.text)
 
     @bindings.add('c-s')
     def select_ssh(event):
@@ -219,6 +217,22 @@ def custom_keybindings(bindings, **kw):
         t = ' '.join(t.split()).replace('\n', '. ')
         event.current_buffer.insert_text(t)
         event.current_buffer.insert_text('"""')
+
+    @bindings.add('s-left')
+    def jump_left(event):
+        """vim用ctrlじゃなくshift矢印でword_jump"""
+        buff = event.current_buffer
+        pos = buff.document.find_previous_word_beginning(count=event.arg, WORD=True)
+        if pos:
+            buff.cursor_position += pos
+
+    @bindings.add('s-right')
+    def jump_right(event):
+        """vim用ctrlじゃなくshift矢印でword_jump"""
+        buff = event.current_buffer
+        pos = buff.document.find_next_word_ending(count=event.arg, WORD=True)
+        if pos:
+            buff.cursor_position += pos
 
 
 # --------------------
@@ -376,7 +390,6 @@ def _get_history(session_history=None, return_list=False):
         return '\n'.join(cmds)
 
 
-
 jap = re.compile('[あ-んア-ン一-鿐]')
 def _eng(x):
     """翻訳コマンド"""
@@ -484,3 +497,16 @@ def _ahost():
     uh kawai -s @(t['aws-kawai']['dns'])
 aliases['ahost'] = _ahost
 
+
+def gokart_completer(prefix, line, begidx, endidx, ctx):
+    """gokart completer"""
+    l = line.split(' ')
+    if len(l)>1 and l[0]=='python' and l[1].endswith('.py') and '.' in prefix and len(line[:begidx-1].split(' '))==2:
+        sys.path.append('.')
+        m = prefix.split('.')[0]
+        try:
+            module = importlib.import_module(m)
+            return set([m+'.'+x for x in dir(module) if not x.startswith('__')])
+        except:
+            pass
+completer add gokart_completer gokart_completer "<import"
