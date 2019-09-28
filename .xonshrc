@@ -252,7 +252,7 @@ def custom_keybindings(bindings, **kw):
 # --------------------
 def _git_open():
     """gitをブラウザで開く"""
-    open @([x for x in $(git remote show origin).split('\n') if 'url:' in x][0].split(': ')[1])
+    open @([x for x in $(git remote show origin).split('\n') if 'URL:' in x][0].split(': ')[1])
 aliases['gopen']=_git_open
 
 def _git_add_peco():
