@@ -255,6 +255,7 @@ def _git_add_peco():
     print('Added:')
     for x in $(git diff --name-only | peco).split('\n'):
         if x:
+            cd @($(git rev-parse --show-toplevel).rstrip())
             echo @(x.split())
             git add @(x.split())
 aliases['gap']=_git_add_peco
@@ -522,3 +523,11 @@ def gokart_completer(prefix, line, begidx, endidx, ctx):
         except:
             pass
 completer add gokart_completer gokart_completer "<import"
+
+
+def gokart_arg_completer(prefix, line, begidx, endidx, ctx):
+    """gokart completer"""
+    l = line.split(' ')
+    if len(l)>1 and l[0]=='python' and l[1].endswith('.py'):
+        return {'--local-scheduler', '--to-date', '--from-date'}
+completer add gokart_arg_completer gokart_arg_completer end

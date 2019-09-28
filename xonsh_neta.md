@@ -56,6 +56,6 @@
 - voxをちゃんと使ってみる
 - jsonフォーマット
     - https://github.com/soheilpro/catj
-- gorkartのpickleをよしなに開いたりするやつ
 - fzf試す
 - https://github.com/sqshq/sampler
+
