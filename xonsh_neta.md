@@ -10,8 +10,6 @@
     - https://github.com/jsks/zsh-plugins/tree/master/zbk
     - https://github.com/jocelynmallon/zshmarks
 - historyのbackendをクラウドに
-- cd-gitroot for xonsh
-    - https://github.com/mollifier/cd-gitroot
 - terminal上でsurround.vimっぽく括弧つけるやつ
 - pyenv情報をpromptに表示する
 - 次に必要なコマンドの予測
@@ -19,10 +17,6 @@
 - pipeの最後につなげると勝手に何かしらSyntaxHighlightしてくれるやつ
     - logの色付けとか
     - batまではいかないccat的な
-- GitHubをブラウザで開く周りのサポート
-    - git browse-remote or hub command
-- git diffをすごい見やすくするやつ
-	- 要調査
 - requestsを使ったWebページの概要表示してくれるやつ
 	- titleや省略されたtext、リンク数、whois、...
 - アラームコマンド
@@ -52,7 +46,6 @@
 - ghq, hubコマンドを上手く使うやつ
 - エディタ用
     - https://qiita.com/hashimock/items/c9810430498043fd70eb
-- ctrl+hjkl使ってる人向けのキーバインド
 - voxをちゃんと使ってみる
 - jsonフォーマット
     - https://github.com/soheilpro/catj
