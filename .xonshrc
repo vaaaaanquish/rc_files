@@ -21,6 +21,8 @@ import pandas as pd
 from os.path import expanduser
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.styles import Style
+from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+
 
 # --------------------
 # ENV and PATH
@@ -233,6 +235,16 @@ def custom_keybindings(bindings, **kw):
         pos = buff.document.find_next_word_ending(count=event.arg, WORD=True)
         if pos:
             buff.cursor_position += pos
+
+    @bindings.add('s-up')
+    def up_command(event):
+        """vim用ctrlじゃなくshift矢印でcommand_jump"""
+        get_by_name('previous-history')(event)
+
+    @bindings.add('s-down')
+    def down_command(event):
+        """vim用ctrlじゃなくshift矢印でcommand_jump"""
+        get_by_name('next-history')(event)
 
 
 # --------------------
