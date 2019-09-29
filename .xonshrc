@@ -82,6 +82,7 @@ $PTK_STYLE_OVERRIDES={
  "aborting": "ansibrightblack",
  }
 $DIR_HIST_PATH = expanduser("~/.dirhist")
+$_Z_DATA = expanduser("~/.dirhist")
 $OPEN_FILE_HIST_PATH = expanduser('~/.openfilehist')
 
 
