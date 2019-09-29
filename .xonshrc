@@ -177,7 +177,7 @@ def add_to_file(cmd, rtn, out, ts, cwd):
         cmd = cmd.strip().split(' ')
         if cmd[0] in ['vim', 'v', 'op'] and len(cmd)==2:
             with open($OPEN_FILE_HIST_PATH[0], 'a') as dh:
-                cmd[1] = expanduser(cmd[1]) if '~' in cmd[1] else op.path.join(cwd,cmd[1])
+                cmd[1] = expanduser(cmd[1]) if '~' in cmd[1] else os.path.join(cwd,cmd[1])
                 print(' '.join(cmd), file=dh)
 
 # --------------------
