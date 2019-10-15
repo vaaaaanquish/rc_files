@@ -18,6 +18,9 @@ from prompt_toolkit.keys import Keys
 from xonsh.lazyasd import lazyobject
 from collections import Counter
 import pickle
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=UserWarning)
 import pandas as pd
 from os.path import expanduser
 from prompt_toolkit import print_formatted_text
@@ -628,3 +631,24 @@ def gokart_arg_completer(prefix, line, begidx, endidx, ctx):
     if len(l)>1 and l[0]=='python' and l[1].endswith('.py'):
         return {'--local-scheduler', '--to-date', '--from-date'}
 completer add gokart_arg_completer gokart_arg_completer end
+
+
+def _piper(x):
+    """pip auto reinstall"""
+    if x:
+        x = x[0].replace('/', '')
+    else:
+        x = os.getcwd().split('/')[-1]
+        if os.path.exists(f'./m3{x}'):
+            x = f'm3{x}'
+        print(f'Reinstall: {x}')
+    if os.path.exists('./setup.py'):
+        pip uninstall -y @(x)
+        python setup.py install
+    else:
+        print(f'Not Found setup.py, reinstall PyPI? [y/n]', end=':')
+        if sys.stdin.readline().replace('\n', '').lower() != 'y':
+            return
+        pip uninstall -y @(x)
+        pip install @(x)
+aliases['pi'] = _piper
