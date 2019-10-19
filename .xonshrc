@@ -29,6 +29,7 @@ from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.filters import (Condition, IsMultiline, HasSelection, ViInsertMode)
 
+# special
 
 # --------------------
 # ENV and PATH
@@ -173,26 +174,26 @@ def add_to_file(olddir, newdir, **kw):
         print(newdir, file=dh)
 
 
-@events.on_postcommand
-def add_to_file(cmd, rtn, out, ts, cwd):
-    """vimかopで開いたファイルを保存"""
-    if rtn == 0:
-        cmd = cmd.strip().split(' ')
-        if cmd[0] in ['vim', 'v', 'op'] and len(cmd)==2:
-            with open($OPEN_FILE_HIST_PATH[0], 'a') as dh:
-                cmd[1] = expanduser(cmd[1]) if '~' in cmd[1] else os.path.join(cwd,cmd[1])
-                print(' '.join(cmd), file=dh)
+# @events.on_postcommand
+# def add_to_file(cmd, rtn, out, ts):
+#     """vimかopで開いたファイルを保存"""
+#     if rtn == 0:
+#         cmd = cmd.strip().split(' ')
+#         if cmd[0] in ['vim', 'v', 'op'] and len(cmd)==2:
+#             with open($OPEN_FILE_HIST_PATH[0], 'a') as dh:
+#                 cmd[1] = expanduser(cmd[1]) if '~' in cmd[1] else os.path.join(cwd,cmd[1])
+#                 print(' '.join(cmd), file=dh)
 
 # --------------------
 # Keybindings
 # --------------------
 def _dir_most_common():
     lines = open($dir_hist_path[0]).read().rstrip("\n").split("\n")
-    return "\n".join([p for p, c in counter(lines).most_common()])
+    return "\n".join([p for p, c in Counter(lines).most_common()])
 
 def _open_file_most_common():
     lines = open($OPEN_FILE_HIST_PATH[0]).read().rstrip("\n").split("\n")
-    return "\n".join([p for p, c in counter(lines).most_common()])
+    return "\n".join([p for p, c in Counter(lines).most_common()])
 
 
 @events.on_ptk_create
@@ -253,7 +254,7 @@ def custom_keybindings(bindings, **kw):
         event.current_buffer.insert_text(cd_cmd)
 
     @bindings.add('c-z')
-    def op_peco(event):
+    def _op_peco(event):
         """最近開いたファイルをvimで開くかopコマンドで読み込む"""
         selected = $(echo @(_open_file_most_common()) | peco)
         cd_cmd = selected.strip()
@@ -516,7 +517,7 @@ def op(x):
         elif type(res) == list:
             return res[:10]
         elif type(res) == dict:
-            return {k: v for i, (k, v) in enumerate(res) if i <= 10}
+            return {k: v for i, (k, v) in enumerate(res.items()) if i <= 10}
         else:
             return res
     else:
@@ -609,7 +610,6 @@ def _arestart():
     _ahost()
     print('success')
 aliases['arestart'] = _arestart
-
 
 
 def gokart_completer(prefix, line, begidx, endidx, ctx):
