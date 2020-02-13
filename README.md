@@ -8,6 +8,10 @@ mkdir ~/work/iterm
 cp ./com.googlecode.iterm2.plist ~/work/iterm
 ```
 
+### mdr
+https://github.com/MichaelMure/mdr
+set bin
+
 ### install brew
 install xcode from app store.  
 ```
