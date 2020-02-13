@@ -483,8 +483,13 @@ def op(x):
     elif ext == '.json':
         with open(x, 'r') as f:
             res = json.load(f)
+    elif ext == '.md':
+        mdr @(x)
     else:
-        print(f'unkown file type: {x}')
+        if os.path.getsize(x)<10000:
+            bat @(x)
+        else:
+            print(f'unkown file type and large file: {x}')
     if flag:
         if type(res) == pd.DataFrame:
             return res.head(10)
@@ -497,7 +502,6 @@ def op(x):
     else:
         return res
 aliases['op'] = op
-
 
 def bufappend(self, cmd):
     """historyに特定コマンドを保存しないようにする"""
