@@ -29,8 +29,6 @@ from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.filters import (Condition, IsMultiline, HasSelection, ViInsertMode)
 
-# special
-
 # --------------------
 # ENV and PATH
 # --------------------
@@ -133,6 +131,8 @@ aliases['endless'] = 'caffeinate -d -i -m -u -t 999999'
 aliases['kill'] = 'fkill'
 aliases['top'] = 'gtop'
 aliases['htop'] = 'gtop'
+aliases['md'] = 'mdr'
+aliases['ctags'] = '@($(brew --prefix).strip())/bin/ctags'
 
 
 # --------------------
@@ -171,16 +171,6 @@ def add_to_file(olddir, newdir, **kw):
     with open($DIR_HIST_PATH[0], 'a') as dh:
         print(newdir, file=dh)
 
-
-# @events.on_postcommand
-# def add_to_file(cmd, rtn, out, ts):
-#     """vimかopで開いたファイルを保存"""
-#     if rtn == 0:
-#         cmd = cmd.strip().split(' ')
-#         if cmd[0] in ['vim', 'v', 'op'] and len(cmd)==2:
-#             with open($OPEN_FILE_HIST_PATH[0], 'a') as dh:
-#                 cmd[1] = expanduser(cmd[1]) if '~' in cmd[1] else os.path.join(cwd,cmd[1])
-#                 print(' '.join(cmd), file=dh)
 
 # --------------------
 # Keybindings
@@ -237,12 +227,12 @@ def custom_keybindings(bindings, **kw):
         if t=='':
             event.current_buffer.insert_text('op ./')
         else:
-            if 'op(' in t:
+            if 'df=op(' in t:
                 event.current_buffer.text = ''
                 event.current_buffer.insert_text('op '+t.strip().split('op(')[1].split(')')[0].replace('"', '').replace("'",''))
             elif t.startswith('op '):
                 event.current_buffer.text = ''
-                event.current_buffer.insert_text('op("'+t.strip().replace('op ', '')+'")')
+                event.current_buffer.insert_text('df=op("'+t.strip().replace('op ', '')+'")')
 
     @bindings.add('c-d')
     def _dir_most(event):
@@ -364,48 +354,6 @@ def _git_pull():
 aliases['gpull'] = _git_pull
 
 
-
-def _get_host(color=False):
-    """sshホスト一覧を表示したり取得したりする"""
-    inquirer_style = Style.from_dict({
-        'qa': '#5F819D',
-        'qu': '#FF9D00',
-        'dp': '#000'
-    })
-    all_text = ''
-    text = ''
-    for x in $(cat ~/.ssh/config).split('\n'):
-        if 'LocalForward' in x:
-            text += ', ' + x.strip().split(' ')[1]
-        if 'HostName' in x:
-            text += ', ' + x.strip().split(' ')[1]
-        elif 'Host ' in x:
-            if text!='':
-                all_text += text + '\n'
-            text = x.split(' ')[1]
-    all_text += text + '\n'
-    if not color:
-        all_d = []
-        for x in all_text.split('\n'):
-            for i,y in enumerate(x.split(', ')):
-                if i==0:
-                    all_d.append(('class:qu', y))
-                if i==1:
-                    all_d.append(('', ', '))
-                    all_d.append(('class:qa', y))
-                    if len(x.split(', '))==2:
-                        all_d.append(('','\n'))
-                if i==2:
-                    all_d.append(('', ', '))
-                    all_d.append(('class:qp', y))
-                    all_d.append(('','\n'))
-        print_formatted_text(FormattedText(all_d),
-                style=inquirer_style)
-        return
-    return all_text
-aliases['host']=_get_host
-
-
 def _get_history(session_history=None, return_list=False):
     """historyを取得する"""
     hist_dir = __xonsh__.env['XONSH_DATA_DIR']
@@ -431,23 +379,6 @@ def _get_history(session_history=None, return_list=False):
         return cmds
     else:
         return '\n'.join(cmds)
-
-
-def _g_change(account):
-    """gitのアカウントを変える"""
-    account = account[0]
-    if account=='vanquish': account='6syun9'
-    if account=='shukawai': account='piyo'
-    git config --global user.name f"{account}"
-    if account=='shukawai':
-        git config --global user.email piyo
-        print(f'change:{account}')
-    elif account=='6syun9':
-        git config --global user.email hoge
-        print(f'change:{account}')
-    else:
-        print(f'check account name:{account}')
-aliases['gac']=_g_change
 
 
 jap = re.compile('[あ-んア-ン一-鿐]')
@@ -538,70 +469,6 @@ def _mchange(x):
 aliases['mc'] = _mchange
 $WORK_MODE = 'm3'
 mc m3
-
-
-def _aget():
-    t={}
-    for x in json.loads($(aws ec2 describe-instances))['Reservations']:
-        for y in x['Instances']:
-            if y['KeyName']:
-                t.update({y['KeyName']: {'dns':y['PublicDnsName'], 'id':y['InstanceId']}})
-    return t
-
-def jsonaget():
-    return json.dumps(_aget(), indent=4)
-aliases['aget'] = jsonaget
-
-def _astop():
-    t = _aget()
-    aws ec2 stop-instances --instance-ids @(t['aws-kawai']['id'])
-aliases['astop'] = _astop
-
-def _astart():
-    t = _aget()
-    aws ec2 start-instances --instance-ids @(t['aws-kawai']['id'])
-aliases['astart'] = _astart
-
-def _ahost():
-    t = _aget()
-    uh kawai -s @(t['aws-kawai']['dns'])
-aliases['ahost'] = _ahost
-
-def _arestart():
-    _astop()
-    flag = True
-    while flag:
-        time.sleep(5)
-        t = _aget()['aws-kawai']['dns']
-        if t=='':
-            print('stopped')
-            flag = False
-    _astart()
-    flag = True
-    while flag:
-        time.sleep(5)
-        t = _aget()['aws-kawai']['dns']
-        if t!='':
-            print('started')
-            flag = False
-    print('change host')
-    _ahost()
-    print('success')
-aliases['arestart'] = _arestart
-
-
-def gokart_completer(prefix, line, begidx, endidx, ctx):
-    """gokart completer"""
-    l = line.split(' ')
-    if len(l)>1 and l[0]=='python' and l[1].endswith('.py') and '.' in prefix and len(line[:begidx-1].split(' '))==2:
-        sys.path.append('.')
-        m = prefix.split('.')[0]
-        try:
-            module = importlib.import_module(m)
-            return set([m+'.'+x for x in dir(module) if not x.startswith('__')])
-        except:
-            pass
-completer add gokart_completer gokart_completer "<import"
 
 def gokart_arg_completer(prefix, line, begidx, endidx, ctx):
     """gokart completer"""
