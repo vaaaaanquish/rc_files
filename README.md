@@ -169,6 +169,10 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager
 jupyter labextension install jupyterlab-drawio
 ```
 
+```
+mv .ipython/profile_default/startup/default_set.py ~/.ipython/profile_default/startup/
+```
+
 ## check PATH
 ```
 - .config/nvim/dein.toml
