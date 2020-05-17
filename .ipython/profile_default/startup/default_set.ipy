@@ -6,6 +6,7 @@ import json
 import matplotlib.pyplot as plt
 import japanize_matplotlib
 import seaborn as sns
+import requests
 from collections import Counter, defaultdict
 import pickle
 sns.set(style='darkgrid')
