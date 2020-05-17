@@ -173,6 +173,31 @@ jupyter labextension install jupyterlab-drawio
 mv .ipython/profile_default/startup/default_set.py ~/.ipython/profile_default/startup/
 ```
 
+shortcut
+```
+{  
+"shortcuts": [
+        {
+            "command": "jupyterlab_code_formatter:yapf",
+            "keys": [
+                "Ctrl Y",
+            ],
+            "selector": ".jp-Notebook.jp-mod-editMode"
+        },
+        {
+            "command": "notebook:replace-selection",
+            "args": {
+                  "text": "df = op('./')"
+              },
+          "keys": [
+            "Ctrl O"
+          ],
+          "selector": ".jp-Notebook.jp-mod-editMode"
+        }
+    ]
+}
+```
+
 ## check PATH
 ```
 - .config/nvim/dein.toml
