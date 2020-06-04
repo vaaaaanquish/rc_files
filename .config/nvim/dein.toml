@@ -260,7 +260,7 @@ hook_add = '''
   set t_Co=256
 '''
 
-
+# _+jkで空行飛ばし
 [[plugins]]
 repo = 'tyru/columnskip.vim'
 hook_add = '''
