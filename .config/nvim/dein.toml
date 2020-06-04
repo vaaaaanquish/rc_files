@@ -261,3 +261,13 @@ hook_add = '''
 '''
 
 
+[[plugins]]
+repo = 'tyru/columnskip.vim'
+hook_add = '''
+nmap <Leader>j <Plug>(columnskip:nonblank:next)
+omap <Leader>j <Plug>(columnskip:nonblank:next)
+xmap <Leader>j <Plug>(columnskip:nonblank:next)
+nmap <Leader>k <Plug>(columnskip:nonblank:prev)
+omap <Leader>k <Plug>(columnskip:nonblank:prev)
+xmap <Leader>k <Plug>(columnskip:nonblank:prev)
+'''
