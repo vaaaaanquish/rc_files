@@ -356,6 +356,7 @@ aliases['gco'] = _git_check_out
 
 def _git_pull():
     """今いるbranchでgit pull"""
+    git fetch
     x = $(git symbolic-ref --short HEAD).replace('\n', '')
     git pull origin @(x)
 aliases['gpull'] = _git_pull
