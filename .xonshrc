@@ -291,8 +291,15 @@ def custom_keybindings(bindings, **kw):
 # --------------------
 def _git_open():
     """gitをブラウザで開く"""
-    open @([x for x in $(git remote show origin).split('\n') if 'URL:' in x][0].split(': ')[1])
+    url = [x for x in $(git remote show origin).split('\n') if 'URL:' in x][0].split(': ')[1]
+    if 'ssh://' in url:
+        url = url.split('@')[1].split('/')
+        url[0] = url[0].split(':')[0]
+        url[-1] = url[-1].split('.')[0]
+        url = '/'.join(['https://'] + url)
+    open @(url)
 aliases['gopen']=_git_open
+
 
 def _git_add_peco():
     """pecoってgit addする"""
