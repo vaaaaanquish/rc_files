@@ -198,3 +198,7 @@ syntax enable
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
+" ----------------- start up --------------------
+autocmd VimEnter * call TermT()
+autocmd VimEnter * call TermT()
+autocmd VimEnter * stopinsert
