@@ -34,7 +34,7 @@ inoremap <C-e> <C-o>$
 inoremap <C-b> <BS>
 " termからESCでcommand modeにする
 tnoremap <silent> <ESC> <C-\><C-n>
-tnoremap <silent> <Leader>0 <C-\><C-n>
+tnoremap <silent> <Leader>; <C-\><C-n>
 " 折り返し時に表示行単位での移動できるようにする
 nnoremap j gj
 nnoremap k gk
@@ -47,8 +47,8 @@ nnoremap mm :set nonumber!<CR>
 nmap <Esc><Esc> :nohlsearch<CR><Esc>
 " wを2回で単語選択
 inoremap <silent> ww <Esc>viw
-" 入力モード中にSpace+0と入力した場合はESCとみなす
-inoremap <Leader>0 <Esc> 
+" 入力モード中にSpace+;と入力した場合はESCとみなす
+inoremap <Leader>; <Esc> 
 " 検索後にジャンプした際に検索単語を画面中央に持ってくるやつ
 nnoremap n nzz
 nnoremap N Nzz
