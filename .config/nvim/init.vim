@@ -30,6 +30,8 @@ inoremap <C-a> <C-o>^
 """ ctrl+eで行末へ移動
 map <C-e> $
 inoremap <C-e> <C-o>$
+""" ctrl+fで検索
+map <C-f> /
 " insert時にctrl+bでdel
 inoremap <C-b> <BS>
 " termからESCでcommand modeにする
