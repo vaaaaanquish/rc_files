@@ -64,6 +64,7 @@ nodebrew install-binary latest
 nodebrew list
 nodebrew use 0.0.1
 echo 'export PATH=$PATH:/Users/xxxxx/.nodebrew/current/bin' >> ~/.bashrc
+npm install -g yarn
 ```
 check
 ```
