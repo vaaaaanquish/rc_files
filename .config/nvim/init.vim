@@ -31,7 +31,7 @@ inoremap <C-a> <C-o>^
 map <C-e> $
 inoremap <C-e> <C-o>$
 """ ctrl+fで検索
-map <C-f> /
+map <Leader>f /
 " insert時にctrl+bでdel
 inoremap <C-b> <BS>
 " termからESCでcommand modeにする
