@@ -256,3 +256,7 @@ nmap <Leader>k <Plug>(columnskip:nonblank:prev)
 omap <Leader>k <Plug>(columnskip:nonblank:prev)
 xmap <Leader>k <Plug>(columnskip:nonblank:prev)
 '''
+
+# dashを開く
+[[plugins]]
+repo = 'rizzatti/dash.vim'

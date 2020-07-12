@@ -200,6 +200,14 @@ syntax enable
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
+" ----------------- Dash --------------------
+function! s:dash(...)
+  let ft = ''
+  let word = len(a:000) == 0 ? input('Dash search: ', ft.expand('<cword>')) : ft.join(a:000, ' ')
+  call system(printf("open dash://'%s'", word))
+endfunction
+command! -nargs=* Dash call <SID>dash(<f-args>)
+
 " ----------------- start up --------------------
 autocmd VimEnter * call TermT()
 autocmd VimEnter * call TermT()
