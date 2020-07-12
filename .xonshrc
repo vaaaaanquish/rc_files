@@ -236,10 +236,8 @@ def custom_keybindings(bindings, **kw):
 
     @bindings.add('c-d')
     def _dir_most(event):
-        """ディレクトリの履歴をpecoる"""
-        selected = $(echo @(_dir_most_common()) | peco)
-        cd_cmd = "cd " + selected.strip()
-        event.current_buffer.insert_text(cd_cmd)
+        """dコマンド"""
+        event.current_buffer.insert_text('d ')
 
     @bindings.add('c-z')
     def _op_peco(event):
@@ -515,3 +513,8 @@ def _piper(x):
         pip uninstall -y @(x)
         pip install @(x)
 aliases['pi'] = _piper
+
+def _dash(x):
+    x = ' '.join(x)
+    open dash://@(x)
+aliases['d'] = _dash
