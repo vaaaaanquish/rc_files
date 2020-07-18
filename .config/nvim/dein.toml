@@ -59,7 +59,10 @@ repo = 'Shougo/neoyank.vim'
 
 # Markdownのシンタックスハイライト
 [[plugins]]
-repo = 'vim-scripts/Markdown'
+repo = 'plasticboy/vim-markdown'
+hook_add='''
+let g:vim_markdown_folding_disabled = 1
+'''
 
 # Markdownをブラウザでプレビュー(:InstantMarkdownPreview)
 [[plugins]]
