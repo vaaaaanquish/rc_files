@@ -193,6 +193,11 @@ def custom_keybindings(bindings, **kw):
         event.current_buffer.tempfile_suffix = '.xsh'
         event.current_buffer.open_in_editor(event.cli)
 
+    @bindings.add('c-n')
+    def edit_in_editor(event):
+        """historyをvimで開く"""
+        _history_edit()
+
     @bindings.add('c-r')
     def jump_lastline(event):
         """最終行に飛ぶ"""
@@ -287,6 +292,16 @@ def custom_keybindings(bindings, **kw):
 # --------------------
 # commands
 # --------------------
+def _history_edit():
+    history = {h.cmd: h.out for h in filter(lambda x: x.out is not None, reversed(__xonsh__.history)) if h.cmd.strip()}
+    if not history:
+        print('not found history')
+        return
+    selected = $(echo @(list(history.keys())) | peco)
+    if selected and history[selected]:
+        echo @('$ ' + selected + history[selected]) | nvim
+
+
 def _git_open():
     """gitをブラウザで開く"""
     url = [x for x in $(git remote show origin).split('\n') if 'URL:' in x][0].split(': ')[1]
