@@ -35,3 +35,4 @@ plotly
 pandas-profiling
 opencv-python
 gnureadline
+isort[pyproject]
