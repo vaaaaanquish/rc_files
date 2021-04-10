@@ -181,26 +181,26 @@ augroup END
 
 
 " ---------------- dein.vim --------------
-if &compatible
-  set nocompatible
-endif
 exe 'set runtimepath+='. root_path . '.cache/dein/repos/github.com/Shougo/dein.vim'
 if dein#load_state(root_path . '.cache/dein')
   call dein#begin(root_path . '.cache/dein')
   call dein#add(root_path . '.cache/dein/repos/github.com/Shougo/dein.vim')
-  call dein#load_toml(root_path . '.config/nvim/dein.toml', {'lazy': 0})
+  call dein#load_toml(root_path . '.config/nvim/dein.toml')
   call dein#end()
   call dein#save_state()
 endif
+filetype plugin indent on
+syntax enable
 if dein#check_install()
   call dein#install()
 endif
-filetype plugin indent on
-syntax enable
 
 " ---------------- background black --------------
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
+
+" ---------------- python host ------------------
+let g:python3_host_prog = using_python
 
 " ----------------- Dash --------------------
 function! s:dash(...)
@@ -214,3 +214,6 @@ command! -nargs=* Dash call <SID>dash(<f-args>)
 autocmd VimEnter * call TermT()
 autocmd VimEnter * call TermT()
 autocmd VimEnter * stopinsert
+
+" https://github.com/neovim/neovim/issues/11393
+cnoremap 00 <c-u>undo<CR>

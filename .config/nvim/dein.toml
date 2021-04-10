@@ -1,12 +1,3 @@
-# isort
-[[plugins]]
-repo = 'fisadev/vim-isort'
-hook_add = '''
-  if $WORK_MODE=='m3'
-    autocmd BufWritePre *.py :Isort
-  endif
-'''
-
 # 複数行編集
 [[plugins]]
 repo = 'terryma/vim-multiple-cursors'
@@ -14,40 +5,6 @@ hook_add = '''
   let g:multi_cursor_use_default_mapping=0
   let g:multi_cursor_start_word_key = '<C-n>'
   let g:multi_cursor_next_key = '<C-n>'
-'''
-
-# 補完
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
-hook_add = '''
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#omni_patterns = {}
-'''
-
-# Pythonの補完
-[[plugins]]
-repo = 'zchee/deoplete-jedi'
-on_ft = 'python3'
-hook_add = '''
-  let g:deoplete#sources#jedi#python_path = '/Users/shunsuke.kawai/.pyenv/shims/python'
-  let g:deoplete#sources#jedi#server_timeout=100
-  let g:deoplete#sources#jedi#statement_length=100
-'''
-
-# pythonシンタックスハイライト
-[[plugins]]
-repo = 'hdima/python-syntax'
-hook_add = '''
-  let python_highlight_all = 1
-  autocmd FileType python setlocal completeopt-=preview
-'''
-
-# オムニ補完
-[[plugins]]
-repo = 'ervandew/supertab'
-hook_add = '''
-  let g:SuperTabContextDefaultCompletionType = "context"
-  let g:SuperTabDefaultCompletionType = "<c-n>"
 '''
 
 # ウィンドウサイズの変更
@@ -81,16 +38,18 @@ hook_add = '''
   nnoremap <Leader>m :InstantMarkdownPreview<CR>
 '''
 
-# pythonフォーマッタ
+# Pythonフォーマッタ
 [[plugins]]
 repo = 'scrooloose/syntastic'
 hook_add = '''
-  let g:syntastic_python_checkers = ["pep8", "flake8", "pyflake"]
+  let g:syntastic_python_mypy_args = '--ignore-missing-imports --namespace-packages'
+  let g:syntastic_python_checkers = ["pep8", "flake8", "mypy"]
   set statusline+=%#warningmsg#
   set statusline+=%{SyntasticStatuslineFlag()}
   set statusline+=%*
 '''
 
+# Pythonフォーマッタ
 [[plugins]]
 repo = 'mindriot101/vim-yapf'
 hook_add = '''
@@ -100,7 +59,17 @@ hook_add = '''
     unlet cursor
   endfunction
   if $WORK_MODE=='m3'
+    autocmd!
     autocmd BufWritePre *.py call <SID>yapg_format()
+  endif
+'''
+
+# isort
+[[plugins]]
+repo = 'fisadev/vim-isort'
+hook_add = '''
+  if $WORK_MODE=='m3'
+    autocmd BufWritePre *.py :Isort
   endif
 '''
 
@@ -171,7 +140,7 @@ hook_add = '''
 repo = 'scrooloose/nerdtree'
 hook_add = '''
   autocmd StdinReadPre * let s:std_in=1
-  autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+  " autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
   nnoremap <Leader>n :NERDTreeToggle<CR>
   let g:NERDTreeNodeDelimiter = "\u00a0"
   let g:NERDTreeShowHidden=1
@@ -201,7 +170,7 @@ repo = 'Xuyuanp/nerdtree-git-plugin'
 [[plugins]]
 repo = 'kassio/neoterm'
 hook_add = '''
-  set sh=zsh
+  set sh=/bin/zsh
   let g:neoterm_size = 30
   let g:neoterm_autoinsert = 1
   let g:neoterm_autoscroll = 1
@@ -219,7 +188,7 @@ hook_add = '''
 [[plugins]]
 repo = 'rking/ag.vim'
 hook_add = '''
-  nnoremap <Leader>g :Ag 
+  nnoremap <Leader>a :Ag 
 '''
 
 # Unite
@@ -257,7 +226,7 @@ hook_add = '''
   set t_Co=256
 '''
 
-# _+jkで空行飛ばし
+# インデント移動
 [[plugins]]
 repo = 'tyru/columnskip.vim'
 hook_add = '''
@@ -267,4 +236,15 @@ xmap <Leader>j <Plug>(columnskip:nonblank:next)
 nmap <Leader>k <Plug>(columnskip:nonblank:prev)
 omap <Leader>k <Plug>(columnskip:nonblank:prev)
 xmap <Leader>k <Plug>(columnskip:nonblank:prev)
+'''
+
+# coc
+[[plugins]]
+repo = 'neoclide/coc.nvim'
+build = './install.sh nightly'
+hook_add = '''
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
 '''
