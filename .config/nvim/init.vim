@@ -66,9 +66,8 @@ nnoremap sp :<C-u>sp<CR>
 cmap w!! w !sudo tee > /dev/null %
 " ブラウザでURLを開く
 map <Leader>b gx
-
-
-
+" shift uでredo
+nnoremap U <c-r>
 
 
 " ---------------- 入力、システム周り ----------------

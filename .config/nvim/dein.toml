@@ -211,6 +211,10 @@ hook_add = '''
 # 括弧囲むやつs, ds, cs
 [[plugins]]
 repo = 'tpope/vim-surround'
+hook_add = '''
+nm <Leader>" ysiw"
+nm <Leader>' ysiw'
+'''
 
 # surroundをドットコマンドで繰り返す
 [[plugins]]
@@ -224,18 +228,6 @@ hook_add = '''
   syntax enable
   let g:molokai_original = 1
   set t_Co=256
-'''
-
-# インデント移動
-[[plugins]]
-repo = 'tyru/columnskip.vim'
-hook_add = '''
-nmap <Leader>j <Plug>(columnskip:nonblank:next)
-omap <Leader>j <Plug>(columnskip:nonblank:next)
-xmap <Leader>j <Plug>(columnskip:nonblank:next)
-nmap <Leader>k <Plug>(columnskip:nonblank:prev)
-omap <Leader>k <Plug>(columnskip:nonblank:prev)
-xmap <Leader>k <Plug>(columnskip:nonblank:prev)
 '''
 
 # coc
@@ -255,6 +247,17 @@ function! s:check_back_space() abort
 endfunction
 
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+nnoremap <silent> <Leader>k :call <SID>show_documentation()<CR>
+nmap <silent> <Leader>j <Plug>(coc-references)
 '''
 
 # シンタックスハイライト
