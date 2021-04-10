@@ -1,3 +1,29 @@
+# terminalの表示
+[[plugins]]
+repo = 'kassio/neoterm'
+hook_add = '''
+  set sh=/bin/zsh
+  let g:neoterm_size = 30
+  let g:neoterm_autoinsert = 1
+  let g:neoterm_autoscroll = 1
+  function! TermT()
+    if g:neoterm.has_any()
+      call neoterm#toggle({'mod': '', 'target': 0})
+    else
+      call neoterm#toggle({'mod': 'belowright', 'target': 0})
+    end
+  endfunction
+  nnoremap <Leader>t :call TermT()<CR>
+'''
+
+# 閉じカッコの補完
+[[plugins]]
+repo = 'cohama/lexima.vim'
+hook_post_source = '''
+  let g:lexima_no_default_rules = 1
+  call lexima#set_default_rules()
+'''
+
 # 複数行編集
 [[plugins]]
 repo = 'terryma/vim-multiple-cursors'
@@ -14,63 +40,12 @@ hook_add = '''
   let g:winresizer_start_key = '<Leader>e'
 '''
 
-# Unite yfファイル閲覧
-[[plugins]]
-repo = 'Shougo/neomru.vim'
-
-# Unite yyヤンク閲覧
-[[plugins]]
-repo = 'Shougo/neoyank.vim'
-
-
-# Markdownのシンタックスハイライト
-[[plugins]]
-repo = 'plasticboy/vim-markdown'
-hook_add='''
-let g:vim_markdown_folding_disabled = 1
-'''
-
 # Markdownをブラウザでプレビュー(:InstantMarkdownPreview)
 [[plugins]]
 repo = 'suan/vim-instant-markdown'
 hook_add = '''
   let g:instant_markdown_autostart = 0
   nnoremap <Leader>m :InstantMarkdownPreview<CR>
-'''
-
-# Pythonフォーマッタ
-[[plugins]]
-repo = 'scrooloose/syntastic'
-hook_add = '''
-  let g:syntastic_python_mypy_args = '--ignore-missing-imports --namespace-packages'
-  let g:syntastic_python_checkers = ["pep8", "flake8", "mypy"]
-  set statusline+=%#warningmsg#
-  set statusline+=%{SyntasticStatuslineFlag()}
-  set statusline+=%*
-'''
-
-# Pythonフォーマッタ
-[[plugins]]
-repo = 'mindriot101/vim-yapf'
-hook_add = '''
-  function! s:yapg_format()
-    let cursor = getpos(".")
-    call Yapf()
-    unlet cursor
-  endfunction
-  if $WORK_MODE=='m3'
-    autocmd!
-    autocmd BufWritePre *.py call <SID>yapg_format()
-  endif
-'''
-
-# isort
-[[plugins]]
-repo = 'fisadev/vim-isort'
-hook_add = '''
-  if $WORK_MODE=='m3'
-    autocmd BufWritePre *.py :Isort
-  endif
 '''
 
 # power line
@@ -98,13 +73,6 @@ hook_add = '''
   set noshowmode
 '''
 
-# 閉じカッコの補完
-[[plugins]]
-repo = 'cohama/lexima.vim'
-hook_add = '''
-  let g:lexima_no_default_rules = 1
-  call lexima#set_default_rules()
-'''
 
 # <C-/><C-/>でコメント
 [[plugins]]
@@ -166,30 +134,20 @@ hook_add = '''
 repo = 'Xuyuanp/nerdtree-git-plugin'
 
 
-# terminalの表示
-[[plugins]]
-repo = 'kassio/neoterm'
-hook_add = '''
-  set sh=/bin/zsh
-  let g:neoterm_size = 30
-  let g:neoterm_autoinsert = 1
-  let g:neoterm_autoscroll = 1
-  function! TermT()
-    if g:neoterm.has_any()
-      call neoterm#toggle({'mod': '', 'target': 0})
-    else
-      call neoterm#toggle({'mod': 'belowright', 'target': 0})
-    end
-  endfunction
-  nnoremap <Leader>t :call TermT()<CR>
-'''
-
 # Ag検索
 [[plugins]]
 repo = 'rking/ag.vim'
 hook_add = '''
   nnoremap <Leader>a :Ag 
 '''
+
+# Unite yfファイル閲覧
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+
+# Unite yyヤンク閲覧
+[[plugins]]
+repo = 'Shougo/neoyank.vim'
 
 # Unite
 [[plugins]]
@@ -219,16 +177,6 @@ nm <Leader>' ysiw'
 # surroundをドットコマンドで繰り返す
 [[plugins]]
 repo = 'tpope/vim-repeat'
-
-# monokai
-[[plugins]]
-repo = 'tomasr/molokai'
-hook_add = '''
-  colorscheme molokai
-  syntax enable
-  let g:molokai_original = 1
-  set t_Co=256
-'''
 
 # coc
 [[plugins]]
@@ -270,4 +218,14 @@ require'nvim-treesitter.configs'.setup {
   highlight = {enable = true},
 }
 EOF
+'''
+
+# color monokai
+[[plugins]]
+repo = 'tomasr/molokai'
+hook_add = '''
+  colorscheme molokai
+  syntax enable
+  let g:molokai_original = 1
+  set t_Co=256
 '''

@@ -202,7 +202,6 @@ highlight nonText ctermbg=NONE
 " ---------------- python host ------------------
 let g:python3_host_prog = using_python
 
-
 " ----------------- start up --------------------
 autocmd VimEnter * call TermT()
 autocmd VimEnter * call TermT()
