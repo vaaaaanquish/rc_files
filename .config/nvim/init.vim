@@ -203,9 +203,12 @@ highlight nonText ctermbg=NONE
 let g:python3_host_prog = using_python
 
 " ----------------- start up --------------------
-autocmd VimEnter * call TermT()
-autocmd VimEnter * call TermT()
-autocmd VimEnter * stopinsert
+try
+    autocmd VimEnter * call TermT()
+    autocmd VimEnter * call TermT()
+    autocmd VimEnter * stopinsert
+catch
+endtry
 
 " https://github.com/neovim/neovim/issues/11393
 cnoremap 00 <c-u>undo<CR>
