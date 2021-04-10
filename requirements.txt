@@ -36,3 +36,4 @@ pandas-profiling
 opencv-python
 gnureadline
 isort[pyproject]
+python-language-server
