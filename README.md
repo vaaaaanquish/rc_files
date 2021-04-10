@@ -101,7 +101,7 @@ https://github.com/neoclide/coc.nvim/wiki/Language-servers#python
 :CocInstall coc-json
 :CocInstall coc-pyright
 :CocInstall coc-jedi
-:TSInstallInfo
+:TSIntall all
 ```
 
 ### pygements
