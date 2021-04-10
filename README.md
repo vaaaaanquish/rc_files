@@ -99,7 +99,6 @@ https://github.com/neoclide/coc.nvim/wiki/Language-servers#python
 :call coc#util#install()
 :CocInstall coc-python
 :CocInstall coc-json
-:CocInstall coc-pyright
 :CocInstall coc-jedi
 :TSIntall all
 ```
