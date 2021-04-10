@@ -94,6 +94,7 @@ git clone https://github.com/tomasr/molokai
 mv molokai/colors/molokai.vim ~/.vim/colors/
 ```
 
+https://github.com/neoclide/coc.nvim/wiki/Language-servers#python
 ```
 :call coc#util#install()
 :CocInstall coc-python
