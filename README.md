@@ -80,7 +80,8 @@ brew install python
 ### nvim
 neovim is god.
 ```
-brew install neovim
+brew install luajit --HEAD
+brew install neovim --HEAD
 mkdir /tmp/backup/
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 sh ./installer.sh ~/.cache/dein
