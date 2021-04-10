@@ -195,6 +195,12 @@ if dein#check_install()
   call dein#install()
 endif
 
+" ---------- https://teratail.com/questions/37382
+colorscheme molokai
+syntax enable
+let g:molokai_original = 1
+set t_Co=256
+
 " ---------------- background black --------------
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
@@ -202,13 +208,10 @@ highlight nonText ctermbg=NONE
 " ---------------- python host ------------------
 let g:python3_host_prog = using_python
 
-" ----------------- start up --------------------
-try
-    autocmd VimEnter * call TermT()
-    autocmd VimEnter * call TermT()
-    autocmd VimEnter * stopinsert
-catch
-endtry
+" ----------------- start term ------------------
+autocmd VimEnter * call TermT()
+autocmd VimEnter * call TermT()
+autocmd VimEnter * stopinsert
 
 " https://github.com/neovim/neovim/issues/11393
 cnoremap 00 <c-u>undo<CR>

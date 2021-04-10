@@ -1,21 +1,3 @@
-# terminalの表示
-[[plugins]]
-repo = 'kassio/neoterm'
-hook_add = '''
-  set sh=/bin/zsh
-  let g:neoterm_size = 30
-  let g:neoterm_autoinsert = 1
-  let g:neoterm_autoscroll = 1
-  function! TermT()
-    if g:neoterm.has_any()
-      call neoterm#toggle({'mod': '', 'target': 0})
-    else
-      call neoterm#toggle({'mod': 'belowright', 'target': 0})
-    end
-  endfunction
-  nnoremap <Leader>t :call TermT()<CR>
-'''
-
 # 閉じカッコの補完
 [[plugins]]
 repo = 'cohama/lexima.vim'
@@ -222,10 +204,22 @@ EOF
 
 # color monokai
 [[plugins]]
-repo = 'tomasr/molokai'
-hook_add = '''
-  colorscheme molokai
-  syntax enable
-  let g:molokai_original = 1
-  set t_Co=256
-'''
+repo = "tomasr/molokai"
+
+# terminalの表示
+[[plugins]]
+repo = "kassio/neoterm"
+hook_add = """
+  let g:neoterm_size = 30
+  let g:neoterm_autoinsert = 1
+  let g:neoterm_autoscroll = 1
+  set sh=/bin/zsh
+  function! TermT()
+    if g:neoterm.has_any()
+      call neoterm#toggle({'mod': '', 'target': 0})
+    else
+      call neoterm#toggle({'mod': 'belowright', 'target': 0})
+    end
+  endfunction
+  nnoremap <Leader>t :call TermT()<CR>
+"""
