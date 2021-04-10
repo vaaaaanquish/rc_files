@@ -10,7 +10,7 @@
                     "commandPath": "",
                     "configurationSources": ["flake8"],
                     "plugins": {
-                        "jedi_completion": {"enabled": true, "include_params": true},
+                        "jedi_completion": {"enabled": true},
                         "jedi_definition": {"enabled": true, "follow_imports": true, "follow_builtin_imports": true},
                         "jedi_hover": {"enabled": true},
                         "jedi_references": {"enabled": true},
