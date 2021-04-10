@@ -98,6 +98,8 @@ mv molokai/colors/molokai.vim ~/.vim/colors/
 :call coc#util#install()
 :CocInstall coc-python
 :CocInstall coc-json
+:CocInstall coc-pyright
+:CocInstall coc-jedi
 ```
 
 ### pygements
