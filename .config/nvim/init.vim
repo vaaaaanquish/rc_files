@@ -13,7 +13,7 @@
 """ npm -g install instant-markdown-d
 
 let root_path = '/Users/shunsuke.kawai/'
-let using_python = root_path . '.pyenv/versions/3.6.8/lib/python3.6/'
+let using_python = root_path . '.pyenv/shims/python'
 
 
 " ---------------- keymap ----------------
@@ -86,6 +86,7 @@ set encoding=utf-8  " ファイルエンコーディング
 set fileencodings=utf-8  " ファイルエンコーディング
 set fileformats=unix,dos,mac  " エンコーディング適応先
 set clipboard=unnamed,unnamedplus  " yankをクリップボードに
+set ttyfast  " ターミナル接続を高速化
 " 自動コメント挿入をオフに
 augroup auto_comment_off
     autocmd!
@@ -184,7 +185,7 @@ exe 'set runtimepath+='. root_path . '.cache/dein/repos/github.com/Shougo/dein.v
 if dein#load_state(root_path . '.cache/dein')
   call dein#begin(root_path . '.cache/dein')
   call dein#add(root_path . '.cache/dein/repos/github.com/Shougo/dein.vim')
-  call dein#load_toml(root_path . '.config/nvim/dein.toml')
+  call dein#load_toml(root_path . '.config/nvim/dein.toml', {'lazy': 1})
   call dein#end()
   call dein#save_state()
 endif
@@ -201,13 +202,6 @@ highlight nonText ctermbg=NONE
 " ---------------- python host ------------------
 let g:python3_host_prog = using_python
 
-" ----------------- Dash --------------------
-function! s:dash(...)
-  let ft = ''
-  let word = len(a:000) == 0 ? input('Dash search: ', ft.expand('<cword>')) : ft.join(a:000, ' ')
-  call system(printf("open dash://'%s'", word))
-endfunction
-command! -nargs=* Dash call <SID>dash(<f-args>)
 
 " ----------------- start up --------------------
 autocmd VimEnter * call TermT()
