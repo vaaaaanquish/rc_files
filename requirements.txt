@@ -37,3 +37,4 @@ opencv-python
 gnureadline
 isort[pyproject]
 python-language-server
+pylint
