@@ -32,9 +32,12 @@ ipywidgets
 tqdm
 bokeh
 plotly
+gokart
+thunderbolt
 pandas-profiling
 opencv-python
 gnureadline
-isort[pyproject]
-python-language-server
 pylint
+python-language-server[yapf]
+pyls-isort
+pyls-mypy
