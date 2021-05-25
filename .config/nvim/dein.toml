@@ -223,7 +223,3 @@ hook_add = """
   endfunction
   nnoremap <Leader>t :call TermT()<CR>
 """
-
-# auto import
-[[plugins]]
-repo = "relastle/vim-nayvy"
