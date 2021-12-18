@@ -195,8 +195,8 @@ sudo apt -y install nodejs
 sudo npm install -g yarn
 ```
 ```
-sudo apt install cargo
-cargo install tree-sitter-cli
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup run nightly cargo install tree-sitter-cli
 
 vi ~/.bashrc
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -257,3 +257,19 @@ rm -rf nerd-fonts
 ```
 sudo apt install peco
 ```
+
+# docker
+
+```
+sudo rm "/etc/apt/trusted.gpg.d/home:manuelschneid3r.asc"
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+sudo apt update
+apt-cache policy docker-ce
+sudo apt install docker-ce
+sudo systemctl status docker
+
+sudo usermod -aG docker vanquish
+```
+
