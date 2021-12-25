@@ -395,7 +395,9 @@ def bufappend(self, cmd):
 xonsh.history.json.JsonHistory.append = bufappend
 
 
-like_dir={}
+like_dirs={
+"g":"~/work/git"
+}
 def _z(x):
     if x:
         x = x[0]

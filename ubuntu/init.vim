@@ -217,7 +217,7 @@ filetype plugin on
 let g:neoterm_size = 30
 let g:neoterm_autoinsert = 1
 let g:neoterm_autoscroll = 1
-set sh=/bin/bash
+set sh=/bin/zsh
 function! TermT()
 if g:neoterm.has_any()
     call neoterm#toggle({'mod': '', 'target': 0})

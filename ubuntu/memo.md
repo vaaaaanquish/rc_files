@@ -273,3 +273,24 @@ sudo systemctl status docker
 sudo usermod -aG docker vanquish
 ```
 
+# zsh
+
+```
+sudo apt install -y zsh
+```
+
+# rc
+```
+vim ~/.zshrc
+vim ~/.bashrc
+```
+```
+export PATH="/usr/local/cuda/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export ZSH_FLAG="true"  # zsh only
+. "$HOME/.cargo/env"
+
+xonsh
+```
+
