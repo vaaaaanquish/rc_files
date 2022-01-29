@@ -175,11 +175,22 @@ sudo apt install guake
 
 sudo apt install copyq
 sudo apt install wmctrl
-# extention -> python -> wmctrl, copyq
+
+extention -> python ->  copyq and Window switcher
 
 # dconf dump /apps/guake/ > guake.dconf
 dconf load /apps/guake/ < guake.dconf
 ```
+
+## clipoard
+```
+# start copyq settings
+- Autostart
+- Always on Top
+- history:1000
+- global: show hide menu -> alt+v
+```
+
 
 
 # discord
