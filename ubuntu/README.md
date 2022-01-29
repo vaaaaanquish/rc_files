@@ -380,3 +380,15 @@ download: https://zoom.us/download?os=linux
 ```
 sudo apt install ./zoom.deb
 ```
+
+# gcloud
+ref: https://cloud.google.com/sdk/docs/install
+
+```
+mkdir ~/work/bin
+cd ~/work/bin
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-370.0.0-linux-x86_64.tar.gz
+tarload *.tar.gz
+rm *.tar.gz
+./google-cloud-sdk/install.sh
+```
