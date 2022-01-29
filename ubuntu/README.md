@@ -365,3 +365,10 @@ rm -rf inbinput-gestures
 libinput-gestures-setup autostart
 libinput-gestures-setup start
 ```
+
+# Zoom
+download: https://zoom.us/download?os=linux
+
+```
+sudo apt install ./zoom.deb
+```

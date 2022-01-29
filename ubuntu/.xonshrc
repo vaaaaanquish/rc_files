@@ -13,11 +13,17 @@ import warnings
 import xonsh.history
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=UserWarning)
+from xontrib.z import ZHandler
 import pandas as pd
 from os.path import expanduser
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 
-like_dirs={'g': '~/work/git'}
+like_dirs={
+        'w': '~/work',
+        'g': '~/work/git',
+        'd': '~/Download',
+        'D': '~/Downlaod',
+        }
 
 # --------------------
 # ENV and PATH
