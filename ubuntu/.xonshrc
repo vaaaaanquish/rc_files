@@ -28,6 +28,9 @@ like_dirs={
 # --------------------
 # ENV and PATH
 # --------------------
+# PATH
+$PATH.append('/home/vanquish/work/bin/google-cloud-sdk/bin')
+
 # Editor
 os.environ.update({'EDITOR': expanduser('/usr/bin/nvim')})
 $EDITOR = expanduser('/usr/bin/nvim')
@@ -384,3 +387,4 @@ def _z(x):
         else:
             cd @(like_dir)
 aliases['z'] = _z
+
