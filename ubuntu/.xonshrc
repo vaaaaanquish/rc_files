@@ -4,36 +4,25 @@ import os
 import os.path
 import platform
 import json
-import glob
 from collections import OrderedDict
 from operator import itemgetter
 import time
 import builtins
-from pip._internal import main as _main
-import importlib
-import xonsh.xontribs
-from xonsh.xontribs import xontrib_context, update_context
-from prompt_toolkit.formatted_text import FormattedText
-from prompt_toolkit.keys import Keys
-from xonsh.lazyasd import lazyobject
-from collections import Counter
 import pickle
 import warnings
+import xonsh.history
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=UserWarning)
 import pandas as pd
 from os.path import expanduser
-from prompt_toolkit import print_formatted_text
-from prompt_toolkit.styles import Style
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
-from prompt_toolkit.application.current import get_app
-from prompt_toolkit.filters import (Condition, IsMultiline, HasSelection, ViInsertMode)
+
+like_dirs={'g': '~/work/git'}
 
 # --------------------
 # ENV and PATH
 # --------------------
-$PATH.append(expanduser('~/.local/bin'))
-$PATH.append(expanduser('/usr/bin'))
+# Editor
 os.environ.update({'EDITOR': expanduser('/usr/bin/nvim')})
 $EDITOR = expanduser('/usr/bin/nvim')
 $VISUAL = expanduser('/usr/bin/nvim')
@@ -61,6 +50,9 @@ $XONSH_STYLE_OVERRIDES={
  "auto-suggestion": "ansibrightblack",
  "aborting": "ansibrightblack",
  }
+$DIR_HIST_PATH = expanduser("~/.dirhist")
+$OPEN_FILE_HIST_PATH = expanduser('~/.openfilehist')
+
 
 # --------------------
 # aliases
@@ -105,14 +97,14 @@ xontrib load coreutils
 # zshから呼び出された場合はpowerline使わない
 if 'ZSH_FLAG' in ${...}:
     def get_git_user():
-        return '{INTENSE_GREEN}' + $(git config user.name).strip() + ':' + ':{curr_branch}{WHITE} ( {YELLOW}"{cwd}" {WHITE}) {INTENSE_RED}$ '
+        return '{INTENSE_GREEN}' + $(git config user.name).strip() + ':{curr_branch}{WHITE} ( {YELLOW}"{cwd}" {WHITE}) {INTENSE_RED}$ '
     $PROMPT = get_git_user
 else:
     $PL_COLORS = {
             "cwd": ("BLACK", "#a6e22e"),
             "git_root": ("BLUE", ""),
             "git_sub_dir": ("BLACK","")}
-    $PL_EXTRA_SEC = {"user": lambda: [' {user} ', 'BLACK', '#fd971f']}
+    $PL_EXTRA_SEC = {"user": lambda: [' {user} ', 'BLACK', '#fd971f'] }
     $PL_PROMPT='user>cwd>branch'
     $PL_TOOLBAR='!'
     $PL_RPROMPT='!'
@@ -120,8 +112,20 @@ else:
 
 
 # --------------------
+# events
+# --------------------
+
+@events.on_chdir
+def add_to_file(olddir, newdir, **kw):
+    """移動したディレクトリを保存"""
+    with open($DIR_HIST_PATH[0], 'a') as dh:
+        print(newdir, file=dh)
+
+
+# --------------------
 # Keybindings
 # --------------------
+
 @events.on_ptk_create
 def custom_keybindings(bindings, **kw):
 
@@ -140,14 +144,6 @@ def custom_keybindings(bindings, **kw):
     def jump_lastline(event):
         """最終行に飛ぶ"""
         event.current_buffer.cursor_position=len(event.current_buffer.text)
-
-    @bindings.add('c-s')
-    def select_ssh(event):
-        """ssh先をpecoる"""
-        hosts = _get_host(True)
-        selected = $(echo @(hosts) | peco)
-        if selected:
-            event.current_buffer.insert_text('ssh ' + selected.strip().split(', ')[0])
 
     @bindings.add('c-f')
     def get_auto_suggest(event):
@@ -177,16 +173,6 @@ def custom_keybindings(bindings, **kw):
                 event.current_buffer.text = ''
                 event.current_buffer.insert_text('df=op("'+t.strip().replace('op ', '')+'")')
 
-    @bindings.add('c-t')
-    def _engs(event):
-        """クリップボードを翻訳コマンド形式で入力"""
-        event.current_buffer.insert_text('t """')
-        t = $(pbpaste)
-        for w in ['#', '@', '>', '*', '"', "'"]:
-            t = t.replace(w, ' ')
-        t = ' '.join(t.split()).replace('\n', '. ')
-        event.current_buffer.insert_text(t)
-        event.current_buffer.insert_text('"""')
 
     @bindings.add('s-left')
     def jump_left(event):
@@ -231,12 +217,12 @@ def _history_edit():
 def _git_open():
     """gitをブラウザで開く"""
     url = [x for x in $(git remote show origin).split('\n') if 'URL:' in x][0].split(': ')[1]
-    if 'ssh://' in url:
+    if 'ssh://' in url or 'git@' in url:
         url = url.split('@')[1].split('/')
-        url[0] = url[0].split(':')[0]
+        url[0] = url[0].replace(':', '/')
         url[-1] = url[-1].split('.')[0]
         url = '/'.join(['https://'] + url)
-    open @(url)
+    _ = $(google-chrome @(url))
 aliases['gopen']=_git_open
 
 
@@ -288,7 +274,7 @@ def _git_check_out(x):
     if len(x)==0:
         x = $(git branch -a | peco).strip().replace('remotes/origin/', '')
     else:
-        x = x[0]
+        x = ' '.join(x)
     print(f'checkout:{x}')
     git checkout @(x)
 aliases['gco'] = _git_check_out
@@ -328,18 +314,6 @@ def _get_history(session_history=None, return_list=False):
         return '\n'.join(cmds)
 
 
-jap = re.compile('[あ-んア-ン一-鿐]')
-def _eng(x):
-    """翻訳コマンド"""
-    if len(x)==0: return
-    x = ' '.join(x)
-    if jap.search(x) is None:
-        trans en:ja @(x)
-    else:
-        echo @(x) | xargs trans ja:en
-aliases['t'] = _eng
-
-
 def op(x):
     '''ファイルをよしなに開くやつ'''
     res = None
@@ -362,10 +336,10 @@ def op(x):
         with open(x, 'r') as f:
             res = json.load(f)
     elif ext == '.md':
-        mdr @(x)
+        less @(x)
     else:
         if os.path.getsize(x)<10000:
-            bat @(x)
+            less @(x)
         else:
             print(f'unkown file type and large file: {x}')
     if flag:
@@ -395,9 +369,6 @@ def bufappend(self, cmd):
 xonsh.history.json.JsonHistory.append = bufappend
 
 
-like_dirs={
-"g":"~/work/git"
-}
 def _z(x):
     if x:
         x = x[0]

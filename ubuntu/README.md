@@ -5,13 +5,10 @@ keyboard, touchpad, network, display
 
 ref: https://askubuntu.com/posts/1324339/revisions
 ```
-sudo add-apt-repository ppa:canonical-hwe-team/backport-iwlwifi
+sudo add-apt-repository -y ppa:canonical-hwe-team/backport-iwlwifi
 sudo apt update
 sudo apt upgrade
 sudo apt install -y backport-iwlwifi-dkms gcc make git build-essential
-
-# sudo apt install linux-firmware
-# sudo apt install linux-oem-osp1
 
 git clone git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
 cd linux-firmware
@@ -49,6 +46,29 @@ ubuntu-drivers devices
 ### check recommended driver
 sudo apt install nvidia-driver-470
 sudo reboot
+```
+
+# git
+
+```
+git config --global user.name "vaaaaanquish"
+git config --global user.email "6syun9@gmail.com"
+
+cd ~/.ssh
+ssh-keygen -t rsa
+```
+set: github.com/settings/ssh
+
+
+# Ubuntu
+
+```
+settings
+appearance
+privacy > screen lock
+power
+mouse, touch pad
+keyboad shortcut all disable
 ```
 
 # Chrome
@@ -106,6 +126,8 @@ sudo systemctl restart console-setup
 ```
 sudo apt install autokey-gtk
 # autokey settings copy folder ~/.config/autokey/data/keybindings
+# login auto
+# setting all hot key!!
 ```
 
 # mozc
@@ -131,9 +153,17 @@ sudo apt update
 sudo apt install albert
 
 # setting albelt
-# meta + space
-# startup
-# and extensions
+- meta + space
+- Theme: Arc Dark Gray
+- Amount of results: 10
+- sudo apt install -y imagemagick
+- startup
+- and extensions
+    - Calculator
+    - Chromium
+    - Python
+    - Unicode emoji
+    - websearch google
 ```
 
 
@@ -145,8 +175,10 @@ sudo apt install guake
 
 sudo apt install copyq
 sudo apt install wmctrl
-# ubuntu settings -> keybord shortcuts -> alt+hoge, super+hoge disable
 # extention -> python -> wmctrl, copyq
+
+# dconf dump /apps/guake/ > guake.dconf
+dconf load /apps/guake/ < guake.dconf
 ```
 
 
@@ -161,9 +193,9 @@ sudo apt install discord.deb
 # Python, ruby, node, tools 
 
 ```
-sudo apt install libncurses5-dev
-sudo apt install python-is-python3 python3-pip libpython3.8-dev
-sudo apt intall ruby ruby-dev
+sudo apt install -y libncurses5-dev
+sudo apt install -y python-is-python3 python3-pip libpython3.8-dev
+sudo apt install -y ruby ruby-dev
 ```
 ```
 vi ~/.bashrc
@@ -184,7 +216,7 @@ sudo apt install fd-find
 ```
 pip install -r requirements.txt  # from github
 
-jupyter serverextension enable --py jupyterlab --sys-prefix
+jupyter serverextension enable --py jupyterlab --user
 jupyter notebook --generate-config
 ```
 ```
@@ -211,6 +243,10 @@ sudo apt install neovim/focal
 ```
 
 ```
+rustup toolchain install nightly
+```
+
+```
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 sh ./installer.sh ~/.cache/dein
 mkdir -p ~/.config/coc/extensions
@@ -219,11 +255,8 @@ mkdir ~/.vim
 cd ~/.vim
 mkdir colors
 git clone https://github.com/tomasr/molokai
-mv molokai/colors ~/.config/nvim/
-
-cd ~/.cache/dein/repos/github.com/neoclide/coc.nvim
-yarn install
-yarn build
+mkdir ~/.config/nvim/colors
+mv molokai/colors ~/.config/nvim/colors
 
 mkdir ~/.config/nvim/bundle
 cd ~/.config/nvim/bundle
@@ -240,6 +273,11 @@ sudo apt install xsel
 :call coc#util#install()
 :CocInstall coc-json
 :TSIntall all
+```
+```
+cd ~/.cache/dein/repos/github.com/neoclide/coc.nvim
+yarn install
+yarn build
 ```
 
 # font
@@ -273,6 +311,13 @@ sudo systemctl status docker
 sudo usermod -aG docker vanquish
 ```
 
+```
+sudo nvim /lib/systemd/system/docker.service
+
+# [Service]
+# TimeoutStopSec=150
+```
+
 # zsh
 
 ```
@@ -282,7 +327,6 @@ sudo apt install -y zsh
 # rc
 ```
 vim ~/.zshrc
-vim ~/.bashrc
 ```
 ```
 export PATH="/usr/local/cuda/bin:$PATH"
@@ -293,4 +337,31 @@ export ZSH_FLAG="true"  # zsh only
 
 xonsh
 ```
+```
+vim ~/.bashrc
+```
+```
+export PATH="/usr/local/cuda/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+. "$HOME/.cargo/env"
 
+xonsh
+```
+
+# dualdisplay
+
+ref: https://ohmyenter.com/trackpad-gestures-with-libinput-on-linux/
+```
+sudo gpasswd -a $USER input
+sudo reboot
+sudo apt-get install xdotool wmctrl
+sudo apt-get install libinput-tools
+git clone https://github.com/bulletmark/libinput-gestures.git
+cd libinput-gestures
+sudo make install
+cd ..
+rm -rf inbinput-gestures
+libinput-gestures-setup autostart
+libinput-gestures-setup start
+```
