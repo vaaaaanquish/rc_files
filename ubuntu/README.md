@@ -284,6 +284,7 @@ sudo apt install xsel
 :call coc#util#install()
 :CocInstall coc-json
 :TSIntall all
+:UpdateRemotePlugins
 ```
 ```
 cd ~/.cache/dein/repos/github.com/neoclide/coc.nvim

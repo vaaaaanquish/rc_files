@@ -13,7 +13,7 @@
 """ npm -g install instant-markdown-d
 
 let root_path = '/home/vanquish/'
-let using_python = root_path . '/usr/bin/python'
+let using_python = '/usr/bin/python'
 
 
 " ---------------- keymap ----------------
