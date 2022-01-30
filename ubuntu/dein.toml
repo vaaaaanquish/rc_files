@@ -65,6 +65,10 @@ hook_add = '''
 [[plugins]]
 repo = 'tomtom/tcomment_vim'
 overwrite = true
+hook_add = '''
+  let g:tcommentMapLeader1 = ''
+  noremap <silent> <C-_><C-_> :TComment<CR>
+'''
 
 # vvvで選択範囲拡張
 [[plugins]]
