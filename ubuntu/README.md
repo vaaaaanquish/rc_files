@@ -311,6 +311,8 @@ sudo apt install peco
 # docker
 
 ```
+sudo apt install -y libssl-dev
+
 sudo rm "/etc/apt/trusted.gpg.d/home:manuelschneid3r.asc"
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -

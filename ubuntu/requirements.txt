@@ -42,3 +42,4 @@ python-language-server[yapf]
 pyls-isort
 pyls-mypy
 pyls-black
+poetry
