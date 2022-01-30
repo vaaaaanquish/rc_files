@@ -75,8 +75,8 @@ hook_add = '''
 repo = 'terryma/vim-expand-region'
 overwrite = true
 hook_add = '''
-  vmap v <Plug>(expand_region_expand)
-  vmap <C-v> <Plug>(expand_region_shrink)
+  xmap v <Plug>(expand_region_expand)
+  xmap <C-v> <Plug>(expand_region_shrink)
 '''
 
 # 置換のビジュアライズ
