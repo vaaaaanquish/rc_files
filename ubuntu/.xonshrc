@@ -280,13 +280,20 @@ def _git_no_add(x):
 aliases['gano'] = _git_no_add
 
 def _git_check_out(x):
+    b_flag = False
     if len(x)==0:
         x = $(git branch -a | peco).strip().replace('remotes/origin/', '')
     else:
-        x = ' '.join(x)
+        if '-b ' in x:
+            b_frag = True
+            x = x.replace(' -b', '').strip()
     print(f'checkout:{x}')
-    git checkout @(x)
+    if b_flag:
+        git checkout -b @(x)
+    else:
+        git checkout @(x)
 aliases['gco'] = _git_check_out
+
 
 def _git_pull():
     """今いるbranchでgit pull"""
