@@ -371,7 +371,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 xonsh
 ```
 
-# dualdisplay
+# dualdisplay and trackpad
 
 ref: https://ohmyenter.com/trackpad-gestures-with-libinput-on-linux/
 ```
@@ -386,6 +386,13 @@ cd ..
 rm -rf inbinput-gestures
 libinput-gestures-setup autostart
 libinput-gestures-setup start
+```
+
+safty
+```
+# https://qiita.com/naomori/items/bd2b49573ce5e68e2eee
+# https://gitlab.com/CalcProgrammer1/OpenRGB/-/issues/950
+# and apt install tools
 ```
 
 # Zoom
@@ -406,3 +413,4 @@ tarload *.tar.gz
 rm *.tar.gz
 ./google-cloud-sdk/install.sh
 ```
+
