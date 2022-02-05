@@ -389,10 +389,14 @@ libinput-gestures-setup start
 ```
 
 safty
+ref: https://wayland.freedesktop.org/libinput/doc/latest/touchpad-pressure-debugging.html#
 ```
-# https://qiita.com/naomori/items/bd2b49573ce5e68e2eee
-# https://gitlab.com/CalcProgrammer1/OpenRGB/-/issues/950
-# and apt install tools
+# sudo vi /etc/libinput/local-overrides.quirks
+
+[Touchpad touch override]
+MatchUdevType=touchpad
+MatchName=*Magic Trackpad 2
+AttrPressureRange=10:8
 ```
 
 # Zoom
