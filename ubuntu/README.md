@@ -418,3 +418,10 @@ rm *.tar.gz
 ./google-cloud-sdk/install.sh
 ```
 
+# textlint
+
+set ~/.textlintrc
+```
+sudo npm install -g textlint
+sudo npm install -g textlint-rule-prh textlint-rule-preset-jtf-style textlint-rule-preset-ja-technical-writing
+```
