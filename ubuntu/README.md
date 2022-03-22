@@ -235,7 +235,9 @@ sudo apt install libssl1.1=1.1.1f-1ubuntu2
 curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt -y update
 sudo apt -y install nodejs
-sudo npm install -g yarn
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+npm install -g yarn
 ```
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh

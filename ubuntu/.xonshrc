@@ -30,6 +30,7 @@ like_dirs={
 # --------------------
 # PATH
 $PATH.append('/home/vanquish/work/bin/google-cloud-sdk/bin')
+$PATH.append('/home/vanquish/.npm-global/bin')
 
 # Editor
 os.environ.update({'EDITOR': expanduser('/usr/bin/nvim')})
