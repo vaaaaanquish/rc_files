@@ -386,6 +386,9 @@ cd libinput-gestures
 sudo make install
 cd ..
 rm -rf inbinput-gestures
+
+mv ubuntu/libinput-gestures.conf ~/.config/
+
 libinput-gestures-setup autostart
 libinput-gestures-setup start
 ```
