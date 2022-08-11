@@ -126,7 +126,9 @@ sudo systemctl restart console-setup
 
 ```
 sudo apt install autokey-gtk
-# autokey settings copy folder ~/.config/autokey/data/keybindings
+# autokey settings copy folder 
+cp ubuntu/autokey/data/keybindings/* ~/.config/autokey/keybindings/
+cp ubuntu/autokey/autokey.json ~/.config/autokey/
 # login auto
 # setting all hot key!!
 ```
