@@ -55,9 +55,10 @@ git config --global user.name "vaaaaanquish"
 git config --global user.email "6syun9@gmail.com"
 
 cd ~/.ssh
-ssh-keygen -t rsa
+vi id_rsa
+# from 1password
+ssh -T git@github.com
 ```
-set: github.com/settings/ssh
 
 
 # Ubuntu
@@ -87,18 +88,13 @@ sudo apt install ./1password.deb
 # CUDA
 ```
 # check: https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=20.04&target_type=deb_network
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
-sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
-sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
-sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
-sudo apt-get update
 sudo apt-get -y install cuda
 ```
 
 # cudnn
 ```
 # https://developer.nvidia.com/cudnn
-# login and download deb
+# login and download deb for ubuntu2004
 sudo apt install ./libcudnn.deb
 ```
 ```
@@ -143,6 +139,14 @@ reboot
 # add precomposition enter -> commit
 ```
 
+# Guake
+
+```
+sudo apt install guake
+# guake settings 
+# dconf dump /apps/guake/ > guake.dconf
+dconf load /apps/guake/ < guake.dconf
+```
 # Albert
 
 ```
@@ -150,7 +154,9 @@ curl "https://build.opensuse.org/projects/home:manuelschneid3r/public_key" | sud
 echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_20.04/ /' | sudo tee /etc/apt/sources.list.d/home:manuelschneid3r.list
 sudo wget -nv https://download.opensuse.org/repositories/home:manuelschneid3r/xUbuntu_20.04/Release.key -O "/etc/apt/trusted.gpg.d/home:manuelschneid3r.asc"
 sudo apt update
+sudo apt install copyq wmctrl
 sudo apt install albert
+
 
 # setting albelt
 - meta + space
@@ -162,33 +168,22 @@ sudo apt install albert
     - Calculator
     - Chromium
     - Python
-    - Unicode emoji
+         - CopyQ
+            - # extention -> python ->  copyq and Window switcher
+            - # open copyq __init__.py > active key "c"
+    - Unicode emoji?
     - websearch google
 ```
 
 
-# terminal
-
-```
-sudo apt install guake
-# guake settings 
-
-sudo apt install copyq
-sudo apt install wmctrl
-
-extention -> python ->  copyq and Window switcher
-
-# dconf dump /apps/guake/ > guake.dconf
-dconf load /apps/guake/ < guake.dconf
-```
-
-## clipoard
+# clipoard
 ```
 # start copyq settings
 - Autostart
 - Always on Top
 - history:1000
 - global: show hide menu -> alt+v
+- theme: dark
 ```
 
 
@@ -222,25 +217,31 @@ sudo apt update
 sudo apt install diff-so-fancy
 sudo apt install bat
 sudo apt install silversearcher-ag
-sudo apt install fd-find
 ```
 ```
 pip install -r requirements.txt  # from github
 
+# restart terminal
 jupyter serverextension enable --py jupyterlab --user
 jupyter notebook --generate-config
 ```
 ```
 sudo apt install libssl1.1=1.1.1f-1ubuntu2
 curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+# if update errorr > rm /etc/apt/sources.list.d/cudnn*
 sudo apt -y update
 sudo apt -y install nodejs
 mkdir ~/.npm-global
 npm config set prefix '~/.npm-global'
 npm install -g yarn
+
+vi ~/.bashrc
+# export PATH="$HOME/.npm-global/bin:$PATH"
 ```
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# restart terminal
+rustup toolchain install nightly
 rustup run nightly cargo install tree-sitter-cli
 
 vi ~/.bashrc
@@ -256,10 +257,6 @@ sudo apt install neovim/focal
 ```
 
 ```
-rustup toolchain install nightly
-```
-
-```
 curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 sh ./installer.sh ~/.cache/dein
 mkdir -p ~/.config/coc/extensions
@@ -268,8 +265,8 @@ mkdir ~/.vim
 cd ~/.vim
 mkdir colors
 git clone https://github.com/tomasr/molokai
-mkdir ~/.config/nvim/colors
-mv molokai/colors ~/.config/nvim/colors
+mkdir -p ~/.config/nvim/colors
+mv molokai/colors/molokai.vim ~/.config/nvim/colors/
 
 mkdir ~/.config/nvim/bundle
 cd ~/.config/nvim/bundle
@@ -278,6 +275,13 @@ git clone https://github.com/kassio/neoterm.git
 mkdir -p ~/.local/share/nvim/site/pack/nvim-treesitter/start
 cd ~/.local/share/nvim/site/pack/nvim-treesitter/start
 git clone https://github.com/nvim-treesitter/nvim-treesitter.git
+```
+```
+# copy rc_files ubuntu/coc-settings.json, dein.toml, init.vim
+cp ubuntu/.xonshrc ~/
+cp ubuntu/coc-settings.json ~/.config/nvim/
+cp ubuntu/dein.toml ~/.config/nvim/
+cp ubuntu/init.vim ~/.config/nvim/
 ```
 ```
 sudo apt install xsel
@@ -293,6 +297,7 @@ cd ~/.cache/dein/repos/github.com/neoclide/coc.nvim
 yarn install
 yarn build
 ```
+agree: treesitter warning
 
 # font
 
@@ -385,7 +390,7 @@ git clone https://github.com/bulletmark/libinput-gestures.git
 cd libinput-gestures
 sudo make install
 cd ..
-rm -rf inbinput-gestures
+rm -rf linbinput-gestures
 
 mv ubuntu/libinput-gestures.conf ~/.config/
 
@@ -415,6 +420,7 @@ sudo apt install ./zoom.deb
 ref: https://cloud.google.com/sdk/docs/install
 
 ```
+
 mkdir ~/work/bin
 cd ~/work/bin
 curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-370.0.0-linux-x86_64.tar.gz
