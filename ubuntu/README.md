@@ -69,7 +69,12 @@ appearance
 privacy > screen lock
 power
 mouse, touch pad
-keyboad shortcut all disable
+keyboad shortcut all disable (Switch application Alt+Tab)
+```
+
+# disable Dock
+```
+gnome-extensions disable ubuntu-dock@ubuntu.com
 ```
 
 # Chrome
