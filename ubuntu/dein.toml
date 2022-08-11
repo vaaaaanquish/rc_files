@@ -230,7 +230,7 @@ hook_add = '''
 lua <<EOF
 vim.cmd('packadd! nvim-treesitter')
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
+  ensure_installed = "all",
   highlight = {enable = true},
 }
 EOF
