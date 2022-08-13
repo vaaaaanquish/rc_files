@@ -389,8 +389,9 @@ xonsh
 
 ref: https://ohmyenter.com/trackpad-gestures-with-libinput-on-linux/
 ```
-sudo gpasswd -a $USER input
+sudo gpasswd -a vanquish input
 sudo reboot
+sudo apt install meson gettext
 sudo apt-get install xdotool wmctrl
 sudo apt-get install libinput-tools
 git clone https://github.com/bulletmark/libinput-gestures.git
