@@ -6,6 +6,20 @@ rev = "release"
 overwrite = true
 hook_add = '''
 source ~/.cache/dein/repos/github.com/neoclide/coc.nvim_release/plugin/coc.vim
+let g:coc_global_extensions = [
+\'@yaegassy/coc-volar',
+\'coc-css',
+\'coc-docker',
+\'coc-eslint',
+\'coc-git',
+\'coc-html',
+\'coc-json',
+\'coc-markdownlint',
+\'coc-sql',
+\'coc-toml',
+\'coc-lists',
+\'coc-yank',
+\]
 
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -38,6 +52,19 @@ command! -nargs=0 Format :call CocActionAsync('format')
 
 hi CocSearch ctermfg=12 guifg=#18A3FF
 hi CocMenuSel ctermbg=109 guibg=#13354A
+
+" CocLists
+nnoremap <Leader>h :exe 'CocList mru'<CR>
+nnoremap <Leader>c :exe 'CocList cmdhistory'<CR>
+nnoremap <Leader>y :<C-u>CocList -A --normal yank<cr>
+'''
+
+# Ag検索
+[[plugins]]
+repo = 'rking/ag.vim'
+overwrite = true
+hook_add = '''
+  nnoremap <Leader>a :Ag 
 '''
 
 # 閉じカッコの補完
