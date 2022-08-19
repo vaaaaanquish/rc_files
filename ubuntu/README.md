@@ -69,7 +69,12 @@ appearance
 privacy > screen lock
 power
 mouse, touch pad
-keyboad shortcut all disable
+keyboad shortcut all disable (Switch application Alt+Tab)
+```
+
+# disable Dock
+```
+gnome-extensions disable ubuntu-dock@ubuntu.com
 ```
 
 # Chrome
@@ -121,7 +126,9 @@ sudo systemctl restart console-setup
 
 ```
 sudo apt install autokey-gtk
-# autokey settings copy folder ~/.config/autokey/data/keybindings
+# autokey settings copy folder 
+cp ubuntu/autokey/data/keybindings/* ~/.config/autokey/keybindings/
+cp ubuntu/autokey/autokey.json ~/.config/autokey/
 # login auto
 # setting all hot key!!
 ```
@@ -383,8 +390,9 @@ xonsh
 
 ref: https://ohmyenter.com/trackpad-gestures-with-libinput-on-linux/
 ```
-sudo gpasswd -a $USER input
+sudo gpasswd -a vanquish input
 sudo reboot
+sudo apt install meson gettext
 sudo apt-get install xdotool wmctrl
 sudo apt-get install libinput-tools
 git clone https://github.com/bulletmark/libinput-gestures.git
