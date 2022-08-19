@@ -2,6 +2,14 @@
     "coc.preferences.formatOnSaveFiletypes": [
         "python"
     ],
+    "suggest.triggerAfterInsertEnter": true,
+    "suggest.noselect": true,
+    "suggest.minTriggerInputLength": 2,
+    "suggest.acceptSuggestionOnCommitCharacter": true,
+    "suggest.snippetIndicator": " ►",
+    "suggest.enablePreview": true,
+    "coc.preferences.hoverTarget": "float",
+    "coc.preferences.formatOnType": true,
     "languageserver": {
         "python": {
             "command": "/usr/bin/python",
