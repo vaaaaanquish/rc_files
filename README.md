@@ -98,6 +98,7 @@ https://github.com/neoclide/coc.nvim/wiki/Language-servers#python
 ```
 :call coc#util#install()
 :CocInstall coc-json
+:CocInstall coc-python
 :TSIntall all
 ```
 

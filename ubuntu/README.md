@@ -295,6 +295,8 @@ sudo apt install xsel
 ```
 ```
 :call coc#util#install()
+:CocInstall coc-json
+:CocInstall coc-python
 :TSIntall all
 :UpdateRemotePlugins
 ```
