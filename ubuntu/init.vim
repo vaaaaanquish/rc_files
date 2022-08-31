@@ -68,6 +68,8 @@ cmap w!! w !sudo tee > /dev/null %
 map <Leader>b gx
 " shift uでredo
 nnoremap U <c-r>
+" マウス無効化
+set mouse=
 
 
 " ---------------- 入力、システム周り ----------------
