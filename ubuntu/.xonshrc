@@ -94,6 +94,10 @@ aliases["vim"] = "nvim"
 aliases['tardump'] = 'tar -zcvf'
 aliases['tarload'] = 'tar -zxvf'
 
+# zshから呼び出された場合は表示が崩れないように配慮する
+if 'ZSH_FLAG' not in ${...}:
+    aliases["tree"] = "colorls --tree"
+    aliases['ls'] = "colorls --color=auto"
 
 # --------------------
 # xontrib
