@@ -217,6 +217,7 @@ vi ~/.bashrc
 ```
 sudo gem install git-browse-remote
 sudo gem install redcarpet pygments.rb
+sudo gem install colorls
 ```
 ```
 sudo add-apt-repository ppa:aos1/diff-so-fancy

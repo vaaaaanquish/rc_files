@@ -21,8 +21,8 @@ from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 like_dirs={
         'w': '~/work',
         'g': '~/work/git',
-        'd': '~/Download',
-        'D': '~/Downlaod',
+        'd': '~/Downloads',
+        'D': '~/Downloads',
         }
 
 # --------------------
@@ -68,9 +68,9 @@ $OPEN_FILE_HIST_PATH = expanduser('~/.openfilehist')
 # aliases
 # --------------------
 aliases['ls'] = "ls --color=auto"
-aliases["l"] = "ls -lh"
-aliases["la"] = "ls -lha"
-aliases["ll"] = "ls -lh"
+aliases["l"] = "colorls -lh"
+aliases["la"] = "colorls -lha"
+aliases["ll"] = "colorls -lh"
 aliases["sc"] = "screen"
 aliases['free'] = "free -h"
 aliases['f'] = 'free -h'
