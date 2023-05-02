@@ -1,0 +1,345 @@
+import re
+import sys
+import os
+import os.path
+import platform
+import json
+from collections import OrderedDict
+from operator import itemgetter
+import time
+import builtins
+import pickle
+import warnings
+import xonsh.history
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=UserWarning)
+from xontrib.z import ZHandler
+import pandas as pd
+from os.path import expanduser
+from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+
+like_dirs={
+        'w': '~/work',
+        'g': '~/work/git',
+        'd': '~/Downloads',
+        'D': '~/Downloads',
+        }
+
+# --------------------
+# ENV and PATH
+# --------------------
+# PATH
+$PATH.append('')
+
+# Editor
+os.environ.update({'EDITOR': expanduser('~/homebrew/bin/nvim')})
+$EDITOR = expanduser('~/homebrew/bin/nvim')
+$VISUAL = expanduser('~/homebrew/bin/nvim')
+$VI_MODE = False
+$COMPLETIONS_CONFIRM = True
+$IGNOREEOF = True
+$INDENT = "    "
+$CASE_SENSITIVE_COMPLETIONS = False
+$HISTCONTROL = "ignoredups"
+$XONSH_AUTOPAIR = False
+$AUTO_CD = True
+$XONSH_SHOW_TRACEBACK = True
+$SUPPRESS_BRANCH_TIMEOUT_MESSAGE = True
+$UPDATE_COMPLETIONS_ON_KEYPRESS = True
+$LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30"
+$XONSH_HISTORY_SIZE = (3000, 'commands')
+$XONSH_HISTORY_MATCH_ANYWHERE = True
+$XONSH_STYLE_OVERRIDES={
+ "completion-menu": "bg:ansiblack ansiwhite",
+ "completion-menu.completion": "bg:ansiblack",
+ "completion-menu.completion.current": "bg:ansiwhite ansiblack",
+ "scrollbar.background": "bg:ansibrightblack",
+ "scrollbar.arrow": "bg:ansiblack ansiwhite bold" ,
+ "scrollbar.button": "bg:ansiblack",
+ "auto-suggestion": "ansibrightblack",
+ "aborting": "ansibrightblack",
+ }
+$DIR_HIST_PATH = expanduser("~/.dirhist")
+$OPEN_FILE_HIST_PATH = expanduser('~/.openfilehist')
+
+
+# --------------------
+# aliases
+# --------------------
+aliases['ls'] = "ls --color=auto"
+aliases["l"] = "colorls -lh"
+aliases["la"] = "colorls -lha"
+aliases["ll"] = "colorls -lh"
+aliases["sc"] = "screen"
+aliases['free'] = "free -h"
+aliases['f'] = 'free -h'
+aliases['wf'] = 'watch free -h'
+aliases['ee'] = "exit"
+aliases["ju"] = "jupyter lab"
+aliases['jul'] = 'jupyter lab'
+aliases["gb"] = "git branch"
+aliases["gd"] = "git diff"
+aliases["ga"] = "git add"
+aliases["gl"] = "git log"
+aliases["gbrowse"] = "git browse-remote"
+aliases['gclone'] = 'git clone'
+aliases["vz"] = "nvim ~/.zshrc"
+aliases["vx"] = "nvim ~/.xonshrc"
+aliases["vv"] = "nvim ~/.config/nvim"
+aliases["vs"] = "nvim ~/.ssh/config"
+aliases["v"] = "nvim"
+aliases["vi"] = "nvim"
+aliases["vim"] = "nvim"
+aliases['tardump'] = 'tar -zcvf'
+aliases['tarload'] = 'tar -zxvf'
+aliases['kill'] = 'fkill'
+
+# zshから呼び出された場合は表示が崩れないように配慮する
+if 'ZSH_FLAG' not in ${...}:
+    aliases["tree"] = "colorls --tree"
+    aliases['ls'] = "colorls --color=auto"
+
+# --------------------
+# xontrib
+# --------------------
+xontrib load z
+xontrib load readable-traceback
+$READABLE_TRACE_STRIP_PATH_ENV=True
+$READABLE_TRACE_REVERSE=True
+xontrib load coreutils
+
+# zshから呼び出された場合はpowerline使わない
+if 'ZSH_FLAG' in ${...}:
+    def get_git_user():
+        return '{INTENSE_GREEN}' + $(git config user.name).strip() + ':{curr_branch}{WHITE} ( {YELLOW}"{cwd}" {WHITE}) {INTENSE_RED}$ '
+    $PROMPT = get_git_user
+else:
+    $PL_COLORS = {
+            "cwd": ("BLACK", "#a6e22e"),
+            "git_root": ("BLUE", ""),
+            "git_sub_dir": ("BLACK","")}
+    $PL_EXTRA_SEC = {"user": lambda: [' {user} ', 'BLACK', '#fd971f'] }
+    $PL_PROMPT='user>cwd>branch'
+    $PL_TOOLBAR='!'
+    $PL_RPROMPT='!'
+    xontrib load powerline2
+
+
+# --------------------
+# events
+# --------------------
+
+@events.on_chdir
+def add_to_file(olddir, newdir, **kw):
+    """移動したディレクトリを保存"""
+    with open($DIR_HIST_PATH[0], 'a') as dh:
+        print(newdir, file=dh)
+
+
+# --------------------
+# Keybindings
+# --------------------
+
+@events.on_ptk_create
+def custom_keybindings(bindings, **kw):
+
+    @bindings.add('c-v')
+    def edit_in_editor(event):
+        """コンソール入力をvimで開く"""
+        event.current_buffer.tempfile_suffix = '.xsh'
+        event.current_buffer.open_in_editor(event.cli)
+
+    @bindings.add('c-n')
+    def edit_in_editor(event):
+        """historyをvimで開く"""
+        _history_edit()
+
+    @bindings.add('c-r')
+    def jump_lastline(event):
+        """最終行に飛ぶ"""
+        event.current_buffer.cursor_position=len(event.current_buffer.text)
+
+    @bindings.add('c-f')
+    def get_auto_suggest(event):
+        """suggestの一部確定"""
+        b = event.current_buffer
+        suggestion = b.suggestion
+        if suggestion:
+            t = re.split(r'(\S+\s+)', suggestion.text)
+            try:
+                b.insert_text(next(x for x in t if x))
+            except StopIteration:
+                pass
+            except:
+                raise
+
+    @bindings.add('s-left')
+    def jump_left(event):
+        """vim用ctrlじゃなくshift矢印でword_jump"""
+        buff = event.current_buffer
+        pos = buff.document.find_previous_word_beginning(count=event.arg, WORD=True)
+        if pos:
+            buff.cursor_position += pos
+
+    @bindings.add('s-right')
+    def jump_right(event):
+        """vim用ctrlじゃなくshift矢印でword_jump"""
+        buff = event.current_buffer
+        pos = buff.document.find_next_word_ending(count=event.arg, WORD=True)
+        if pos:
+            buff.cursor_position += pos
+
+    @bindings.add('s-up')
+    def up_command(event):
+        """vim用ctrlじゃなくshift矢印でcommand_jump"""
+        get_by_name('previous-history')(event)
+
+    @bindings.add('s-down')
+    def down_command(event):
+        """vim用ctrlじゃなくshift矢印でcommand_jump"""
+        get_by_name('next-history')(event)
+
+
+# --------------------
+# commands
+# --------------------
+def _history_edit():
+    history = {h.cmd: h.out for h in filter(lambda x: x.out is not None, reversed(__xonsh__.history)) if h.cmd.strip()}
+    if not history:
+        print('not found history')
+        return
+    selected = $(echo @(list(history.keys())) | peco)
+    if selected and history[selected]:
+        echo @('$ ' + selected + history[selected]) | nvim
+
+
+def _git_open():
+    """gitをブラウザで開く"""
+    url = [x for x in $(git remote show origin).split('\n') if 'URL:' in x][0].split(': ')[1]
+    if 'ssh://' in url or 'git@' in url:
+        url = url.split('@')[1].split('/')
+        url[0] = url[0].replace(':', '/')
+        url[-1] = url[-1].split('.')[0]
+        url = '/'.join(['https://'] + url)
+    _ = $(google-chrome @(url))
+aliases['gopen']=_git_open
+
+
+def _git_add_peco():
+    """pecoってgit addする"""
+    print('Added:')
+    for x in $(git diff --name-only | peco).split('\n'):
+        if x:
+            cd @($(git rev-parse --show-toplevel).rstrip())
+            echo @(x.split())
+            git add @(x.split())
+aliases['gap']=_git_add_peco
+
+
+def _git_commit(x):
+    """gcコマンド引数を全てメッセージとして連結"""
+    if len(x)==0:
+        print('set commit message')
+        return
+    x = ' '.join(x)
+    print($(git commit -m @(x)))
+aliases["gc"] = _git_commit
+
+
+def _git_push(x):
+    """今いるbranchにpushする"""
+    if len(x)==0:
+        x = $(git symbolic-ref --short HEAD).replace('\n', '')
+        print(f'push branch:{x}? [y/n]', end=':')
+        if sys.stdin.readline().replace('\n', '').lower() != 'y':
+            return
+    else:
+        x = x[0]
+    print(f'push:{x}')
+    git push origin @(x)
+aliases["gpush"] = _git_push
+
+def _git_no_add(x):
+    """addしていないファイル一覧をpecoでadd"""
+    print('Added:')
+    for x in $(git ls-files --others --exclude-standard | peco).split('\n'):
+        if x:
+            cd @($(git rev-parse --show-toplevel).rstrip())
+            echo @(x.split())
+            git add @(x.split())
+aliases['gano'] = _git_no_add
+
+def _git_check_out(x):
+    b_flag = False
+    if len(x)==0:
+        x = $(git branch -a | peco).strip().replace('remotes/origin/', '')
+    else:
+        if '-b ' in x:
+            b_frag = True
+            x = x.replace(' -b', '').strip()
+    print(f'checkout:{x}')
+    if b_flag:
+        git checkout -b @(x)
+    else:
+        git checkout @(x)
+aliases['gco'] = _git_check_out
+
+
+def _git_pull():
+    """今いるbranchでgit pull"""
+    git fetch
+    x = $(git symbolic-ref --short HEAD).replace('\n', '')
+    git pull origin @(x)
+aliases['gpull'] = _git_pull
+
+
+def _get_history(session_history=None, return_list=False):
+    """historyを取得する"""
+    hist_dir = __xonsh__.env['XONSH_DATA_DIR']
+    files = [ os.path.join(hist_dir,f) for f in os.listdir(hist_dir)
+              if f.startswith('xonsh-') and f.endswith('.json') ]
+    file_hist = []
+    for f in files:
+        try:
+            file_hist.append(json.load(open(f))['data']['cmds'])
+        except:
+            pass
+    cmds = [ ( c['inp'].replace('\n', ''), c['ts'][0] )
+                 for cmds in file_hist for c in cmds if c]
+    cmds.sort(key=itemgetter(1))
+    cmds = [ c[0] for c in cmds[::-1] ]
+    if session_history:
+        cmds.extend(session_history)
+    # dedupe
+    zip_with_dummy = list(zip(cmds, [0] * len(cmds)))[::-1]
+    cmds = list(OrderedDict(zip_with_dummy).keys())[::-1]
+    cmds = reversed(cmds)
+    if return_list:
+        return cmds
+    else:
+        return '\n'.join(cmds)
+
+
+def bufappend(self, cmd):
+    """historyに特定コマンドを保存しないようにする"""
+    if cmd['inp'].strip().split(' ')[0] in ['t', 'ls', 'la', 'l', 'lc', 'lt', 'll', 'lx', 'lf', 'ld']:
+        return None
+    self.buffer.append(cmd)
+    self._len += 1
+    if len(self.buffer) >= self.buffersize:
+        hf = self.flush()
+    else:
+        hf = None
+    return hf
+xonsh.history.json.JsonHistory.append = bufappend
+
+
+def _z(x):
+    if x:
+        x = x[0]
+        like_dir = like_dirs.get(x, '')
+        if not like_dir:
+            ZHandler.handler(x)
+        else:
+            cd @(like_dir)
+aliases['z'] = _z
