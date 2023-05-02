@@ -1,8 +1,0 @@
-[flake8]
-ignore = H301, H306, F401, E252, W605
-max-line-length = 160
-
-[style]
-based_on_style = pep8
-column_limit = 160
-
