@@ -1,39 +1,44 @@
 # rc_files
 
-```
+```bash
 mkdir -p ~/work/git
 mkdir -p ~/.dirhist
 mkdir -p ~/.openfilehist
 ```
 
-### install iTerm2
-using config from dropbox  
-```
+## install iTerm2
+
+using config from dropbo
+
+```bash
 mkdir ~/.iterm2
 cp ./com.googlecode.iterm2.plist ~/.iterm2
 ```
 
-### install brew
-install xcode from app store.  
-```
+## install brew
+
+install xcode from app store
+
+```bash
 xcode-select --install
 ```
 
-install brew (https://brew.sh/index_ja.html)
-```
+install brew [brew](https://brew.sh/index_ja.html)
+
+```bash
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 brew update
 ```
 
-### github
+## github
 
-```
+```bash
 brew install git
 ```
 
 get `github-ssh-id-rsa` from 1password
 
-```
+```bash
 mkdir ~/.ssh
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/github-ssh-id-rsa
@@ -41,29 +46,29 @@ chmod 600 ~/.ssh/github-ssh-id-rsa
 
 `~/.ssh/config`
 
-```
+```bash
 Host github github.com
   HostName github.com
   IdentityFile ~/.ssh/github-ssh-id-rsa
   User git
 ```
 
-### install Font
+## install Font
 
-https://github.com/ryanoasis/nerd-fonts
+[nerd-fonts](https://github.com/ryanoasis/nerd-fonts)
 
-```
+```bash
 brew tap homebrew/cask-fonts
 brew install font-hack-nerd-font
 ```
 
 iTerm2 > Preferences > Profiles > Text > Non-ASCII font > Hack Regular
 
-### asdf
+## asdf
 
-https://asdf-vm.com/guide/getting-started.html
+[guide](https://asdf-vm.com/guide/getting-started.html)
 
-```
+```bash
 brew install gpg gawk
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 . $HOME/.asdf/asdf.sh
@@ -71,7 +76,7 @@ git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 
 plugins
 
-```
+```bash
 asdf plugin add nodejs
 asdf plugin add ruby
 asdf plugin add rust
@@ -82,7 +87,7 @@ install lang
 
 `asdf list all foo`
 
-```
+```bash
 asdf plugin add nodejs
 asdf install nodejs latest
 asdf global nodejs latest
@@ -106,29 +111,29 @@ asdf global python latest
 
 restart shell
 
-### colorls
+## colorls
 
-```
+```bash
 gem install colorls
 ```
 
 `~/.zshrc`
 
-```
+```bash
 source $(dirname $(gem which colorls))/tab_complete.sh
 ```
 
-### git-browse-remote
+## git-browse-remote
 
-https://github.com/motemen/git-browse-remote
+[repo](https://github.com/motemen/git-browse-remote)
 
-```
+```bash
 gem install git-browse-remote
 ```
 
 ### nvim
 
-```
+```bash
 brew install luajit --HEAD
 brew install neovim --HEAD
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein-installer.vim/master/installer.sh)"
@@ -150,15 +155,14 @@ cd ~/.local/share/nvim/site/pack/nvim-treesitter/start
 git clone https://github.com/nvim-treesitter/nvim-treesitter.git
 ```
 
-```
+```bash
 cp .xonshrc ~/
 cp coc-settings.json  ~/.config/nvim/
 cp dein.toml ~/.config/nvim/
 cp init.vim ~/.config/nvim/
 ```
 
-https://github.com/neoclide/coc.nvim/wiki/Language-servers#python
-```
+```vim
 :call coc#util#install()
 :CocInstall coc-json
 :CocInstall coc-yaml
@@ -167,31 +171,33 @@ https://github.com/neoclide/coc.nvim/wiki/Language-servers#python
 :UpdateRemotePlugins
 ```
 
+## pygements
 
-### pygements
 for neovim
-```
+
+```bash
 gem install redcarpet pygments.rb
 ```
 
-### fkill
-kill command  
-https://github.com/sindresorhus/fkill-cli
-```
+## fkill
+
+[repo](https://github.com/sindresorhus/fkill-cli)
+
+```bash
 npm install --global fkill-cli
 ```
 
-### vim markdown
-markdown preview  
-https://github.com/suan/vim-instant-markdown
-```
+## vim markdown
+
+[repo](https://github.com/suan/vim-instant-markdown)
+
+```bash
 npm -g install instant-markdown-d
 ```
 
-### xonsh commands
+## xonsh commands
 
-commands
-```
+```bash
 pip install -r requirements.txt
 brew install fx
 brew install diff-so-fancy
@@ -203,11 +209,11 @@ jupyter serverextension enable --py jupyterlab --sys-prefix
 jupyter notebook --generate-config
 ```
 
-### gcloud
+## gcloud
 
-ref: https://cloud.google.com/sdk/docs/install
+[ref](https://cloud.google.com/sdk/docs/install)
 
-```
+```bash
 mkdir -p ~/work/bin
 cd ~/work/bin
 curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-426.0.0-darwin-arm.tar.gz
@@ -217,7 +223,8 @@ rm *.tar.gz
 ```
 
 ## check PATH
-```
+
+```bash
 - .config/nvim/dein.toml
 g:deoplete#sources#jedi#python_path
 
@@ -232,18 +239,17 @@ $DIR_HIST_PATH
 export PATH="/Users/vanquish/homebrew/bin:$PATH"
 ```
 
-### fix rc
+## fix rc
 
-```
+```bash
 cat .zshrc >> ~/.zshrc
 ```
 
-### start xonsh
+## start xonsh shell
 
 iterm settings > application > login shell
 
-### app
+## Karabiner
 
-install Karabiner-Elements  
-https://pqrs.org/osx/karabiner/  
-using vim mode
+install Karabiner-Elements
+[using vim mode](https://chusotsu-program.com/karabiner-elements-vim/)
