@@ -1,7 +1,4 @@
 {
-    "coc.preferences.formatOnSaveFiletypes": [
-        "python"
-    ],
     "suggest.triggerAfterInsertEnter": true,
     "suggest.noselect": true,
     "suggest.minTriggerInputLength": 2,
