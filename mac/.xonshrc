@@ -1,3 +1,7 @@
+from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+from os.path import expanduser
+import pandas as pd
+from xontrib.z import ZHandler
 import re
 import sys
 import os
@@ -13,23 +17,34 @@ import warnings
 import xonsh.history
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=UserWarning)
-from xontrib.z import ZHandler
-import pandas as pd
-from os.path import expanduser
-from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 
-like_dirs={
-        'w': '~/work',
-        'g': '~/work/git',
-        'd': '~/Downloads',
-        'D': '~/Downloads',
-        }
+like_dirs = {
+    'w': '~/work',
+    'g': '~/work/git',
+    'd': '~/Downloads',
+    'D': '~/Downloads',
+}
 
 # --------------------
 # ENV and PATH
 # --------------------
 # PATH
-$PATH.append('')
+# PATH
+$PATH.append(expanduser('/bin'))
+$PATH.append(expanduser('/sbin'))
+$PATH.append(expanduser('/usr/bin'))
+$PATH.append(expanduser('/usr/sbin'))
+$PATH.append(expanduser('/usr/local/bin'))
+$PATH.append(expanduser('/usr/local/munki'))
+$PATH.append(expanduser('/usr/local/jamf/bin'))
+$PATH.append(expanduser('/Library/Apple/usr/bin'))
+$PATH.append(expanduser('/System/Cryptexes/App/usr/bin'))
+$PATH.append(expanduser('/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin'))
+$PATH.append(expanduser('/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin'))
+$PATH.append(expanduser('/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin'))
+$PATH.append(expanduser('~/homebrew/bin'))
+$HOMEBREW_CACHE = expanduser('~/homebrew/cache')
+source-bash ~/.asdf/asdf.sh
 
 # Editor
 os.environ.update({'EDITOR': expanduser('~/homebrew/bin/nvim')})
@@ -46,19 +61,19 @@ $AUTO_CD = True
 $XONSH_SHOW_TRACEBACK = True
 $SUPPRESS_BRANCH_TIMEOUT_MESSAGE = True
 $UPDATE_COMPLETIONS_ON_KEYPRESS = True
-$LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30"
+$LS_COLORS = "di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30"
 $XONSH_HISTORY_SIZE = (3000, 'commands')
 $XONSH_HISTORY_MATCH_ANYWHERE = True
-$XONSH_STYLE_OVERRIDES={
- "completion-menu": "bg:ansiblack ansiwhite",
- "completion-menu.completion": "bg:ansiblack",
- "completion-menu.completion.current": "bg:ansiwhite ansiblack",
- "scrollbar.background": "bg:ansibrightblack",
- "scrollbar.arrow": "bg:ansiblack ansiwhite bold" ,
- "scrollbar.button": "bg:ansiblack",
- "auto-suggestion": "ansibrightblack",
- "aborting": "ansibrightblack",
- }
+$XONSH_STYLE_OVERRIDES = {
+    "completion-menu": "bg:ansiblack ansiwhite",
+    "completion-menu.completion": "bg:ansiblack",
+    "completion-menu.completion.current": "bg:ansiwhite ansiblack",
+    "scrollbar.background": "bg:ansibrightblack",
+    "scrollbar.arrow": "bg:ansiblack ansiwhite bold",
+    "scrollbar.button": "bg:ansiblack",
+    "auto-suggestion": "ansibrightblack",
+    "aborting": "ansibrightblack",
+}
 $DIR_HIST_PATH = expanduser("~/.dirhist")
 $OPEN_FILE_HIST_PATH = expanduser('~/.openfilehist')
 
@@ -104,8 +119,8 @@ if 'ZSH_FLAG' not in ${...}:
 # --------------------
 xontrib load z
 xontrib load readable-traceback
-$READABLE_TRACE_STRIP_PATH_ENV=True
-$READABLE_TRACE_REVERSE=True
+$READABLE_TRACE_STRIP_PATH_ENV = True
+$READABLE_TRACE_REVERSE = True
 xontrib load coreutils
 
 # zshから呼び出された場合はpowerline使わない
@@ -115,13 +130,13 @@ if 'ZSH_FLAG' in ${...}:
     $PROMPT = get_git_user
 else:
     $PL_COLORS = {
-            "cwd": ("BLACK", "#a6e22e"),
-            "git_root": ("BLUE", ""),
-            "git_sub_dir": ("BLACK","")}
-    $PL_EXTRA_SEC = {"user": lambda: [' {user} ', 'BLACK', '#fd971f'] }
-    $PL_PROMPT='user>cwd>branch'
-    $PL_TOOLBAR='!'
-    $PL_RPROMPT='!'
+        "cwd": ("BLACK", "#a6e22e"),
+        "git_root": ("BLUE", ""),
+        "git_sub_dir": ("BLACK", "")}
+    $PL_EXTRA_SEC = {"user": lambda: [' {user} ', 'BLACK', '#fd971f']}
+    $PL_PROMPT = 'user>cwd>branch'
+    $PL_TOOLBAR = '!'
+    $PL_RPROMPT = '!'
     xontrib load powerline2
 
 
@@ -157,7 +172,7 @@ def custom_keybindings(bindings, **kw):
     @bindings.add('c-r')
     def jump_lastline(event):
         """最終行に飛ぶ"""
-        event.current_buffer.cursor_position=len(event.current_buffer.text)
+        event.current_buffer.cursor_position = len(event.current_buffer.text)
 
     @bindings.add('c-f')
     def get_auto_suggest(event):
@@ -177,7 +192,8 @@ def custom_keybindings(bindings, **kw):
     def jump_left(event):
         """vim用ctrlじゃなくshift矢印でword_jump"""
         buff = event.current_buffer
-        pos = buff.document.find_previous_word_beginning(count=event.arg, WORD=True)
+        pos = buff.document.find_previous_word_beginning(
+            count=event.arg, WORD=True)
         if pos:
             buff.cursor_position += pos
 
@@ -204,13 +220,14 @@ def custom_keybindings(bindings, **kw):
 # commands
 # --------------------
 def _history_edit():
-    history = {h.cmd: h.out for h in filter(lambda x: x.out is not None, reversed(__xonsh__.history)) if h.cmd.strip()}
+    history = {h.cmd: h.out for h in filter(
+        lambda x: x.out is not None, reversed(__xonsh__.history)) if h.cmd.strip()}
     if not history:
         print('not found history')
         return
-    selected = $(echo @(list(history.keys())) | peco)
+    selected = $(echo @ (list(history.keys())) | peco)
     if selected and history[selected]:
-        echo @('$ ' + selected + history[selected]) | nvim
+        echo @ ('$ ' + selected + history[selected]) | nvim
 
 
 def _git_open():
@@ -221,93 +238,109 @@ def _git_open():
         url[0] = url[0].replace(':', '/')
         url[-1] = url[-1].split('.')[0]
         url = '/'.join(['https://'] + url)
-    _ = $(google-chrome @(url))
-aliases['gopen']=_git_open
+    _ = $(google-chrome @ (url))
+
+
+aliases['gopen'] = _git_open
 
 
 def _git_add_peco():
     """pecoってgit addする"""
     print('Added:')
-    for x in $(git diff --name-only | peco).split('\n'):
+    for x in $(git diff - -name-only | peco).split('\n'):
         if x:
-            cd @($(git rev-parse --show-toplevel).rstrip())
-            echo @(x.split())
-            git add @(x.split())
-aliases['gap']=_git_add_peco
+            cd @ ($(git rev-parse - -show-toplevel).rstrip())
+            echo @ (x.split())
+            git add @ (x.split())
+
+
+aliases['gap'] = _git_add_peco
 
 
 def _git_commit(x):
     """gcコマンド引数を全てメッセージとして連結"""
-    if len(x)==0:
+    if len(x) == 0:
         print('set commit message')
         return
     x = ' '.join(x)
-    print($(git commit -m @(x)))
+    print($(git commit - m @ (x)))
+
+
 aliases["gc"] = _git_commit
 
 
 def _git_push(x):
     """今いるbranchにpushする"""
-    if len(x)==0:
-        x = $(git symbolic-ref --short HEAD).replace('\n', '')
+    if len(x) == 0:
+        x = $(git symbolic-ref - -short HEAD).replace('\n', '')
         print(f'push branch:{x}? [y/n]', end=':')
         if sys.stdin.readline().replace('\n', '').lower() != 'y':
             return
     else:
         x = x[0]
     print(f'push:{x}')
-    git push origin @(x)
+    git push origin @ (x)
+
+
 aliases["gpush"] = _git_push
+
 
 def _git_no_add(x):
     """addしていないファイル一覧をpecoでadd"""
     print('Added:')
-    for x in $(git ls-files --others --exclude-standard | peco).split('\n'):
+    for x in $(git ls-files - -others - -exclude-standard | peco).split('\n'):
         if x:
-            cd @($(git rev-parse --show-toplevel).rstrip())
-            echo @(x.split())
-            git add @(x.split())
+            cd @ ($(git rev-parse - -show-toplevel).rstrip())
+            echo @ (x.split())
+            git add @ (x.split())
+
+
 aliases['gano'] = _git_no_add
+
 
 def _git_check_out(x):
     b_flag = False
-    if len(x)==0:
-        x = $(git branch -a | peco).strip().replace('remotes/origin/', '')
+    if len(x) == 0:
+        x = $(git branch - a | peco).strip().replace('remotes/origin/', '')
     else:
         if '-b ' in x:
             b_frag = True
             x = x.replace(' -b', '').strip()
     print(f'checkout:{x}')
     if b_flag:
-        git checkout -b @(x)
+        git checkout - b @ (x)
     else:
-        git checkout @(x)
+        git checkout @ (x)
+
+
 aliases['gco'] = _git_check_out
 
 
 def _git_pull():
     """今いるbranchでgit pull"""
     git fetch
-    x = $(git symbolic-ref --short HEAD).replace('\n', '')
-    git pull origin @(x)
+    x = $(git symbolic-ref - -short HEAD).replace('\n', '')
+    git pull origin @ (x)
+
+
 aliases['gpull'] = _git_pull
 
 
 def _get_history(session_history=None, return_list=False):
     """historyを取得する"""
     hist_dir = __xonsh__.env['XONSH_DATA_DIR']
-    files = [ os.path.join(hist_dir,f) for f in os.listdir(hist_dir)
-              if f.startswith('xonsh-') and f.endswith('.json') ]
+    files = [os.path.join(hist_dir, f) for f in os.listdir(hist_dir)
+             if f.startswith('xonsh-') and f.endswith('.json')]
     file_hist = []
     for f in files:
         try:
             file_hist.append(json.load(open(f))['data']['cmds'])
         except:
             pass
-    cmds = [ ( c['inp'].replace('\n', ''), c['ts'][0] )
-                 for cmds in file_hist for c in cmds if c]
+    cmds = [(c['inp'].replace('\n', ''), c['ts'][0])
+            for cmds in file_hist for c in cmds if c]
     cmds.sort(key=itemgetter(1))
-    cmds = [ c[0] for c in cmds[::-1] ]
+    cmds = [c[0] for c in cmds[::-1]]
     if session_history:
         cmds.extend(session_history)
     # dedupe
@@ -331,6 +364,8 @@ def bufappend(self, cmd):
     else:
         hf = None
     return hf
+
+
 xonsh.history.json.JsonHistory.append = bufappend
 
 
@@ -341,5 +376,7 @@ def _z(x):
         if not like_dir:
             ZHandler.handler(x)
         else:
-            cd @(like_dir)
+            cd @ (like_dir)
+
+
 aliases['z'] = _z
