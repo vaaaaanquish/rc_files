@@ -6,7 +6,6 @@
     "suggest.snippetIndicator": " ►",
     "suggest.enablePreview": true,
     "coc.preferences.hoverTarget": "float",
-    "coc.preferences.formatOnType": true,
     "jedi": {
       "enable": true,
       "startupMessage": false,
