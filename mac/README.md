@@ -1,16 +1,17 @@
 # rc_files
 
+```
+mkdir -p ~/work/git
+mkdir -p ~/.dirhist
+mkdir -p ~/.openfilehist
+```
+
 ### install iTerm2
 using config from dropbox  
 ```
-mkdir ~/work
-mkdir ~/work/iterm
-cp ./com.googlecode.iterm2.plist ~/work/iterm
+mkdir ~/.iterm2
+cp ./com.googlecode.iterm2.plist ~/.iterm2
 ```
-
-### mdr
-https://github.com/MichaelMure/mdr
-set bin
 
 ### install brew
 install xcode from app store.  
@@ -24,95 +25,153 @@ install brew (https://brew.sh/index_ja.html)
 brew update
 ```
 
+### github
+
+```
+brew install git
+```
+
+get `github-ssh-id-rsa` from 1password
+
+```
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/github-ssh-id-rsa
+```
+
+`~/.ssh/config`
+
+```
+Host github github.com
+  HostName github.com
+  IdentityFile ~/.ssh/github-ssh-id-rsa
+  User git
+```
+
 ### install Font
-for colorls.
+
+https://github.com/ryanoasis/nerd-fonts
+
 ```
-brew tap caskroom/fonts
-brew cask install font-hack-nerd-font
+brew tap homebrew/cask-fonts
+brew install font-hack-nerd-font
 ```
+
 iTerm2 > Preferences > Profiles > Text > Non-ASCII font > Hack Regular
 
+### asdf
 
-### ruby
+https://asdf-vm.com/guide/getting-started.html
+
 ```
-brew install rbenv ruby-build
-source ~/.zshrc
-rbenv install -l
-rbenv install 0.0.1
-rbenv global 0.0.1
+brew install gpg gawk
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+. $HOME/.asdf/asdf.sh
 ```
+
+plugins
+
+```
+asdf plugin add nodejs
+asdf plugin add ruby
+asdf plugin add rust
+asdf plugin add python
+```
+
+install lang
+
+`asdf list all foo`
+
+```
+asdf plugin add nodejs
+asdf install nodejs latest
+asdf global nodejs latest
+corepack enable
+asdf reshim nodejs
+
+brew install libyaml
+asdf plugin add ruby
+asdf install ruby latest
+asdf global ruby latest
+
+asdf plugin add rust
+asdf install rust latest
+asdf global rust latest
+
+brew install xz
+asdf plugin add python
+asdf install python latest
+asdf global python latest
+```
+
+restart shell
 
 ### colorls
-colorls
+
 ```
 gem install colorls
+```
+
+`~/.zshrc`
+
+```
 source $(dirname $(gem which colorls))/tab_complete.sh
 ```
 
 ### git-browse-remote
-git-browse-remote
+
 https://github.com/motemen/git-browse-remote
+
 ```
 gem install git-browse-remote
 ```
 
-### node
-```
-brew install nodebrew
-mkdir -p ~/.nodebrew/src
-nodebrew install-binary latest
-nodebrew list
-nodebrew use 0.0.1
-echo 'export PATH=$PATH:/Users/xxxxx/.nodebrew/current/bin' >> ~/.bashrc
-npm install -g yarn
-```
-check
-```
-node -v
-npm -v
-```
-
-### python
-```
-brew install python
-```
-
 ### nvim
-neovim is god.
+
 ```
 brew install luajit --HEAD
 brew install neovim --HEAD
-mkdir /tmp/backup/
-curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
-sh ./installer.sh ~/.cache/dein
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein-installer.vim/master/installer.sh)"
+
 mkdir -p ~/.config/coc/extensions
-vim-monokai
-mkdir ~/.vim
-cd ~/.vim
-mkdir colors
+pip install jedi-language-server
+
+mkdir -p ~/.config/nvim/colors
+cd ~/.config/nvim/colors
 git clone https://github.com/tomasr/molokai
-mv molokai/colors/molokai.vim ~/.vim/colors/
+mv molokai/colors/molokai.vim .
+
+mkdir ~/.config/nvim/bundle
+cd ~/.config/nvim/bundle
+git clone https://github.com/kassio/neoterm.git
+
+mkdir -p ~/.local/share/nvim/site/pack/nvim-treesitter/start
+cd ~/.local/share/nvim/site/pack/nvim-treesitter/start
+git clone https://github.com/nvim-treesitter/nvim-treesitter.git
+```
+
+```
+cp .xonshrc ~/
+cp coc-settings.json  ~/.config/nvim/
+cp dein.toml ~/.config/nvim/
+cp init.vim ~/.config/nvim/
 ```
 
 https://github.com/neoclide/coc.nvim/wiki/Language-servers#python
 ```
 :call coc#util#install()
 :CocInstall coc-json
-:CocInstall coc-python
+:CocInstall coc-yaml
+:CocInstall coc-jedi
 :TSIntall all
+:UpdateRemotePlugins
 ```
+
 
 ### pygements
 for neovim
 ```
-rbenv exec gem install redcarpet pygments.rb
-```
-
-### gtop
-top command  
-https://github.com/aksakalli/gtop
-```
-npm install gtop -g
+gem install redcarpet pygments.rb
 ```
 
 ### fkill
@@ -129,83 +188,32 @@ https://github.com/suan/vim-instant-markdown
 npm -g install instant-markdown-d
 ```
 
-### xonsh
-https://www.soimort.org/translate-shell/
-```
-wget git.io/trans -O /usr/local/bin/trans
-chmod +x /usr/local/bin/trans
-```
-iterm imgcat
-```
-cd /usr/local/bin
-wget https://www.iterm2.com/utilities/imgcat
-chmod +x imgcat
-```
+### xonsh commands
+
 commands
 ```
+pip install -r requirements.txt
 brew install fx
 brew install diff-so-fancy
 brew install bat
 brew install peco
 brew install ag
-```
-install
-```
-pip install -r requirements.txt
-```
-
-
-### jupyter lab
-from requirements.txt
-````
+cargo install fd-find
 jupyter serverextension enable --py jupyterlab --sys-prefix
 jupyter notebook --generate-config
-````
-change:
-`~/.jupyter/lab/user-settings/@jupyterlab/*`
-extention:
-```
-jupyter labextension install @lckr/jupyterlab_variableinspector
-jupyter labextension install @jupyterlab/toc
-jupyter labextension install @ryantam626/jupyterlab_code_formatter
-jupyter serverextension enable --py jupyterlab_code_formatter
-jupyter labextension install @jupyter-widgets/jupyterlab-manager
-jupyter nbextension enable --py --sys-prefix widgetsnbextension
-jupyter labextension install @mflevine/jupyterlab_html
-jupyter labextension install @jupyterlab/plotly-extension
-jupyter labextension install jupyterlab_bokeh
-jupyter labextension install ipyvolume
-jupyter labextension install @jupyter-widgets/jupyterlab-manager
-jupyter labextension install jupyterlab-drawio
 ```
 
-```
-mv .ipython/profile_default/startup/default_set.py ~/.ipython/profile_default/startup/
-```
+### gcloud
 
-shortcut
+ref: https://cloud.google.com/sdk/docs/install
+
 ```
-{  
-"shortcuts": [
-        {
-            "command": "jupyterlab_code_formatter:yapf",
-            "keys": [
-                "Ctrl Y",
-            ],
-            "selector": ".jp-Notebook.jp-mod-editMode"
-        },
-        {
-            "command": "notebook:replace-selection",
-            "args": {
-                  "text": "df = op('./')"
-              },
-          "keys": [
-            "Ctrl O"
-          ],
-          "selector": ".jp-Notebook.jp-mod-editMode"
-        }
-    ]
-}
+mkdir -p ~/work/bin
+cd ~/work/bin
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-426.0.0-darwin-arm.tar.gz
+tar -xvf *.tar.gz
+rm *.tar.gz
+./google-cloud-sdk/install.sh
 ```
 
 ## check PATH
@@ -222,6 +230,12 @@ $DIR_HIST_PATH
 
 - .zshrc
 export PATH="/Users/vanquish/homebrew/bin:$PATH"
+```
+
+### fix rc
+
+```
+cat .zshrc >> ~/.zshrc
 ```
 
 ### app

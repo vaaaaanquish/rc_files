@@ -1,0 +1,279 @@
+# coc
+[[plugins]]
+repo = "neoclide/coc.nvim"
+merged = '0'
+rev = "release"
+overwrite = true
+hook_add = '''
+source ~/.cache/dein/repos/github.com/neoclide/coc.nvim_release/plugin/coc.vim
+let g:coc_global_extensions = [
+\'@yaegassy/coc-volar',
+\'coc-css',
+\'coc-docker',
+\'coc-eslint',
+\'coc-git',
+\'coc-html',
+\'coc-json',
+\'coc-markdownlint',
+\'coc-sql',
+\'coc-toml',
+\'coc-lists',
+\'coc-yank',
+\]
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <C-x><C-z> coc#pum#visible() ? coc#pum#stop() : "\<C-x>\<C-z>"
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <c-space> coc#refresh()
+nnoremap <Leader>k :call ShowDocumentation()<CR>
+nnoremap <Leader>, <Plug>(coc-definition)
+nnoremap <Leader>. <Plug>(coc-references)
+autocmd CursorHold * silent call CocActionAsync('highlight')
+command! -nargs=0 Format :call CocActionAsync('format')
+hi CocSearch ctermfg=12 guifg=#18A3FF
+hi CocMenuSel ctermbg=109 guibg=#13354A
+" CocLists
+nnoremap <Leader>h :exe 'CocList mru'<CR>
+nnoremap <Leader>c :exe 'CocList cmdhistory'<CR>
+nnoremap <Leader>y :<C-u>CocList -A --normal yank<cr>
+'''
+
+# Ag検索
+[[plugins]]
+repo = 'rking/ag.vim'
+overwrite = true
+hook_add = '''
+  nnoremap <Leader>a :Ag 
+'''
+
+# 閉じカッコの補完
+[[plugins]]
+repo = 'cohama/lexima.vim'
+overwrite = true
+hook_post_source = '''
+  let g:lexima_no_default_rules = 1
+  call lexima#set_default_rules()
+'''
+
+# 複数行編集
+[[plugins]]
+repo = 'terryma/vim-multiple-cursors'
+overwrite = true
+hook_add = '''
+  let g:multi_cursor_use_default_mapping=0
+  let g:multi_cursor_start_word_key = '<C-n>'
+  let g:multi_cursor_next_key = '<C-n>'
+'''
+
+# ウィンドウサイズの変更
+[[plugins]]
+repo = 'simeji/winresizer'
+overwrite = true
+hook_add = '''
+  nnoremap <Leader>e :WinResizerStartResize<CR>
+'''
+
+# Markdownをブラウザでプレビュー(:InstantMarkdownPreview)
+[[plugins]]
+repo = 'suan/vim-instant-markdown'
+overwrite = true
+hook_add = '''
+  let g:instant_markdown_autostart = 0
+  nnoremap <Leader>m :InstantMarkdownPreview<CR>
+'''
+
+# power line
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+overwrite = true
+hook_add = '''
+  " https://sy-base.com/myrobotics/vim/vim-lightline/
+  let g:lightline = {
+    \ 'colorscheme': 'wombat',
+    \ 'active': {
+        \ 'left': [ ['mode', 'paste'], ['readonly', 'filepath', 'modified'] ]
+            \ },
+    \ 'component_function':{
+        \ 'filepath': 'FilePath'
+            \ }
+    \ }
+  function! FilePath()
+    if winwidth(0) > 90
+        return expand("%:s")
+    else
+        return expand("%:t")
+    endif
+  endfunction
+  set laststatus=2
+  set noshowmode
+'''
+
+
+# <C-/><C-/>でコメント
+[[plugins]]
+repo = 'tomtom/tcomment_vim'
+overwrite = true
+hook_add = '''
+  let g:tcommentMapLeader1 = ''
+  noremap <silent> <C-_><C-_> :TComment<CR>
+'''
+
+# vvvで選択範囲拡張
+[[plugins]]
+repo = 'terryma/vim-expand-region'
+overwrite = true
+hook_add = '''
+  source ~/.cache/dein/repos/github.com/terryma/vim-expand-region/autoload/expand_region.vim
+  source ~/.cache/dein/repos/github.com/terryma/vim-expand-region/plugin/expand_region.vim
+  xmap v <Plug>(expand_region_expand)
+  xmap <C-v> <Plug>(expand_region_shrink)
+'''
+
+# 置換のビジュアライズ
+[[plugins]]
+repo = 'osyo-manga/vim-over'
+overwrite = true
+hook_add = '''
+  cnoreabb <silent><expr>s getcmdtype()==':' && getcmdline()=~'^s' ? 'OverCommandLine<CR><C-u>%s/<C-r>=get([], getchar(0), '')<CR>' : 's'
+  nnoremap <silent> <Leader>s :OverCommandLine<CR>%s//g<Left><Left>
+  vnoremap <silent> <Leader>s :OverCommandLine<CR>s//g<Left><Left>
+'''
+
+
+# nerdtree
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+overwrite = true
+hook_add = '''
+  autocmd StdinReadPre * let s:std_in=1
+  " autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+  nnoremap <Leader>n :NERDTreeToggle<CR>
+  let g:NERDTreeNodeDelimiter = "\u00a0"
+  let g:NERDTreeShowHidden=1
+  let g:NERDTreeIgnore=['\.DS_Store$', '\.git$', '\.clean$', '\.swp$', '\.bak$', '\~$']
+  autocmd bufenter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
+  function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+    exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+    exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+  endfunction
+  call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+  call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
+  call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+  call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+  call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+  call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+  call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+  call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+  call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+'''
+
+# nerdtreeにgit表示
+[[plugins]]
+repo = 'Xuyuanp/nerdtree-git-plugin'
+overwrite = true
+
+# Ag検索
+[[plugins]]
+repo = 'rking/ag.vim'
+overwrite = true
+hook_add = '''
+  nnoremap <Leader>a :Ag 
+'''
+
+# denite yfファイル閲覧
+[[plugins]]
+repo = 'Shougo/neomru.vim'
+overwrite = true
+on_source = ['denite.nvim']
+
+# denite yyヤンク閲覧
+[[plugins]]
+repo = 'Shougo/neoyank.vim'
+overwrite = true
+on_source = ['denite.nvim']
+
+# denite
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+overwrite = true
+hook_add = '''
+  nnoremap <Leader>y :<C-u>Denite history/yank<CR>
+  nnoremap <Leader>h :<C-u>Denite file_mru<CR>
+  autocmd FileType denite call s:denite_my_settings()
+  function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+  \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> p
+  \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> s
+  \ denite#do_map('do_action', 'vsplit')
+  nnoremap <silent><buffer><expr> q
+  \ denite#do_map('quit')
+  endfunction
+  let g:unite_source_history_yank_enable = 1
+'''
+hook_post_source = '''
+call denite#custom#option('default', {
+\   'prompt'      : '> ',
+\   'split'       : 'floating',
+\   'start_filter': v:true,
+\   'statusline'  : v:false,
+\   'match_highlight': v:true,
+\ })
+'''
+
+# markdownのheadを読む
+[[plugins]]
+repo = 'Shougo/unite-outline'
+overwrite = true
+hook_add = '''
+  nnoremap <Leader>o :<C-u>Unite outline<CR>
+'''
+
+# 括弧囲むやつs, ds, cs
+[[plugins]]
+repo = 'tpope/vim-surround'
+overwrite = true
+hook_add = '''
+nm <Leader>" ysiw"
+nm <Leader>' ysiw'
+'''
+
+# surroundをドットコマンドで繰り返す
+[[plugins]]
+repo = 'tpope/vim-repeat'
+overwrite = true
+
+
+# シンタックスハイライト
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+overwrite = true
+hook_add = '''
+lua <<EOF
+vim.cmd('packadd! nvim-treesitter')
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "all",
+  highlight = {enable = true},
+}
+EOF
+'''
+
+# color monokai
+[[plugins]]
+repo = "tomasr/molokai"
+overwrite = true
