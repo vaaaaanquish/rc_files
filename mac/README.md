@@ -238,6 +238,10 @@ export PATH="/Users/vanquish/homebrew/bin:$PATH"
 cat .zshrc >> ~/.zshrc
 ```
 
+### start xonsh
+
+iterm settings > application > login shell
+
 ### app
 
 install Karabiner-Elements  
