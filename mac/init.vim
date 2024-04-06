@@ -56,6 +56,8 @@ map <Leader>b gx
 nnoremap U <c-r>
 " マウス無効化
 set mouse=
+" space+gで行数カウント
+vnoremap <C-g> g<C-g>
 
 
 " ---------------- 入力、システム周り ----------------
