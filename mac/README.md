@@ -253,3 +253,9 @@ iterm settings > application > login shell
 
 install Karabiner-Elements
 [using vim mode](https://chusotsu-program.com/karabiner-elements-vim/)
+
+## claude code
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
