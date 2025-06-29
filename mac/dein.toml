@@ -277,3 +277,17 @@ EOF
 [[plugins]]
 repo = "tomasr/molokai"
 overwrite = true
+
+# ClaudeCode
+[[plugins]]
+repo = 'coder/claudecode.nvim'
+depends = ['folke/snacks.nvim']
+lazy = false
+hook_add = '''
+  lua require("claudecode").setup()
+  nm <Leader>x :ClaudeCode<CR>
+'''
+
+[[plugins]]
+repo = 'folke/snacks.nvim'
+lazy = false

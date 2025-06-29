@@ -259,3 +259,13 @@ install Karabiner-Elements
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
+
+`~/.cache/dein/repos/github.com/folke/snacks.nvim/lua/snacks/util/init.lua`
+の84行目辺りを修正 [](https://github.com/folke/snacks.nvim/issues/209)
+
+```lua
+    if type(v) == "string" then
+      v = string.gsub(v, "…", ".")
+    end
+    vim.api.nvim_set_option_value(k, v, { scope = "local", win = win })
+```
