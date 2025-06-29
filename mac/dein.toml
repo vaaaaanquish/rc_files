@@ -282,7 +282,7 @@ overwrite = true
 [[plugins]]
 repo = 'coder/claudecode.nvim'
 depends = ['folke/snacks.nvim']
-lazy = false
+overwrite = true
 hook_add = '''
   lua require("claudecode").setup()
   nm <Leader>x :ClaudeCode<CR>
@@ -290,4 +290,4 @@ hook_add = '''
 
 [[plugins]]
 repo = 'folke/snacks.nvim'
-lazy = false
+overwrite = true
