@@ -288,9 +288,7 @@ lua <<EOF
 require("claudecode").setup({
   terminal = {
     snacks_win_opts = {
-      position = "float",
-      width = 0.8,
-      height = 0.8,
+      width = 0.5,
       border = "double",
       backdrop = 80,
       keys = {
@@ -302,6 +300,18 @@ require("claudecode").setup({
       },
     },
   },
+})
+-- Normalモード優先
+vim.api.nvim_create_autocmd({ "BufEnter", "TermOpen" }, {
+  pattern = "*",
+  callback = function()
+    local is_claude = vim.bo.filetype == "snacks_terminal" or string.find(vim.api.nvim_buf_get_name(0), "claude")
+    if vim.bo.buftype == "terminal" and is_claude then
+      vim.schedule(function()
+        vim.cmd("stopinsert")
+      end)
+    end
+  end,
 })
 EOF
 '''
