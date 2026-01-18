@@ -226,4 +226,8 @@ autocmd VimEnter * stopinsert
 " https://github.com/neovim/neovim/issues/11393
 cnoremap 00 <c-u>undo<CR>
 
+" ClaudeCode plugin
 nnoremap <Leader>x :ClaudeCode<CR>
+
+" READMEひらく
+autocmd VimEnter * nested if argc() == 0 && filereadable("./README.md") | edit ./README.md | endif
