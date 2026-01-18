@@ -226,3 +226,4 @@ autocmd VimEnter * stopinsert
 " https://github.com/neovim/neovim/issues/11393
 cnoremap 00 <c-u>undo<CR>
 
+nnoremap <Leader>x :ClaudeCode<CR>

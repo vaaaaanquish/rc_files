@@ -281,13 +281,34 @@ overwrite = true
 # ClaudeCode
 [[plugins]]
 repo = 'coder/claudecode.nvim'
-depends = ['folke/snacks.nvim']
+depends = ['snacks.nvim', 'plenary.nvim']
 overwrite = true
-hook_add = '''
-  lua require("claudecode").setup()
-  nm <Leader>x :ClaudeCode<CR>
+hook_source = '''
+lua <<EOF
+require("claudecode").setup({
+  terminal = {
+    snacks_win_opts = {
+      position = "float",
+      width = 0.8,
+      height = 0.8,
+      border = "double",
+      backdrop = 80,
+      keys = {
+        ["<Esc>"] = false,
+        ["q"] = false,
+        claude_hide = { "<Esc>", function(self) self:hide() end, mode = "t", desc = "Hide" },
+        claude_close = { "q", "close", mode = "n", desc = "Close" },
+      },
+    },
+  },
+})
+EOF
 '''
 
 [[plugins]]
 repo = 'folke/snacks.nvim'
+overwrite = true
+
+[[plugins]]
+repo = 'nvim-lua/plenary.nvim'
 overwrite = true
