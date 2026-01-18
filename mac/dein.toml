@@ -295,7 +295,7 @@ require("claudecode").setup({
       backdrop = 80,
       keys = {
         term_normal = false,
-        ["<esc>"] = { function(self) self:hide() end, mode = "t", desc = "Hide" },
+        ["<esc>"] = { function(self) end, mode = "n", desc = "Hide" },
         ["q"] = { "close", mode = "n", desc = "Close" },
         claude_hide = false,
         claude_close = false,
