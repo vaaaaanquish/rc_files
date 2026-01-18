@@ -392,3 +392,6 @@ def _claude_code_p(x):
 aliases["clp"] = _claude_code_p
 aliases['cl'] = "claude"
 
+def _zsh():
+    $FROM='xonsh' zsh
+aliases['zsh'] = _zsh

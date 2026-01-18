@@ -27,4 +27,8 @@ setopt complete_in_word
 setopt always_last_prompt
 export ZSH_FLAG=true
 alias x=xonsh
-x
+if [[ "$FROM" = 'xonsh' ]]; then
+    echo
+else
+    x
+fi
